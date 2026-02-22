@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/menu.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -8,21 +11,12 @@
     <title>Sistema de Minimas</title>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="cadastro.php">Cadastro</a></li>
-            <li><a href="fases.php">Fases</a></li>
-            <li><a href="admin.php">Administração</a></li>
-        </ul>
-    </nav>
-    </ul>
+<h1>Cadastro de Produtos</h1>
 
-    <h1>Cadastro de Produtos</h1>
-    <form action="upload.php" method="POST" enctype="multipart/form-data">
-        <input type="file" name="arquivo" required><br><br>
-        <button type="submit">Enviar</button>
-    </form>
+<form action="upload.php" method="POST" enctype="multipart/form-data">
+    <input type="file" name="arquivo" required><br><br>
+    <button type="submit">Enviar</button>
+</form>
 
 </body>
 </html>
