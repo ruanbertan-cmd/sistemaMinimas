@@ -1,22 +1,36 @@
 <?php
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/menu.php';
-
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Minimas</title>
-</head>
-<body>
-<h1>Cadastro de Produtos</h1>
 
-<form action="upload.php" method="POST" enctype="multipart/form-data">
-    <input type="file" name="arquivo" required><br><br>
-    <button type="submit">Enviar</button>
-</form>
+<div class="container">
+    <h1>Cadastro de Produtos</h1>
 
-</body>
-</html>
+    <?php
+    if (isset($_SESSION['upload_erro'])):
+    ?>
+    <div class="alert-erro">
+        <?= $_SESSION['upload_erro']; ?>
+    </div>
+    <?php
+    unset($_SESSION['upload_erro']);
+    endif;
+    ?>
+
+    <div class="form-wrapper">
+        <div class="form-card">
+            <form action="upload.php" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label>Selecionar arquivo CSV</label>
+                    <input type="file" name="arquivo" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">Enviar Arquivo</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

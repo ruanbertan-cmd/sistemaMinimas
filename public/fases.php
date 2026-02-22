@@ -2,6 +2,26 @@
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/menu.php';
 
+require_once __DIR__ . '/config/conexao.php';
+
+$sql = "
+SELECT 
+    i.id AS item_id,
+    i.unidade_fabril,
+    i.codigo,
+    i.descricao,
+    i.marca,
+    p.id AS processo_id,
+    p.etapa_atual,
+    p.status_geral
+FROM cadastros_itens_minimas i
+LEFT JOIN itens_processos p ON p.item_id = i.id
+ORDER BY i.id DESC
+";
+
+$stmt = $pdo->query($sql);
+$itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div class="container">
@@ -12,28 +32,51 @@ require_once __DIR__ . '/includes/menu.php';
             <th>Uni. Fabril</th>
             <th>Código</th>
             <th>Descrição</th>
-            <th>Comunicação</th>
-            <th>Fotografia</th>
+            <th>Marca</th>
+            <th>Etapa Atual</th>
             <th>Status Geral</th>
+            <th>Detalhes</th>
         </tr>
 
+        <?php foreach ($itens as $item): ?>
         <tr>
-            <td>SC 1</td>
-            <td>8060192</td>
-            <td>MUNARI BRANCO AC 120X120</td>
-            <td><span class="status andamento">Em Análise</span></td>
-            <td><span class="status pendente">Pendente</span></td>
-            <td><span class="status andamento">Em Andamento</span></td>
-        </tr>
+            <td><?= htmlspecialchars($item['unidade_fabril']) ?></td>
+            <td><?= htmlspecialchars($item['codigo']) ?></td>
+            <td><?= htmlspecialchars($item['descricao']) ?></td>
+            <td><?= htmlspecialchars($item['marca']) ?></td>
 
-        <tr>
-            <td>SC 2</td>
-            <td>8061202</td>
-            <td>MUNARI CIMENTO EXT 90X90</td>
-            <td><span class="status aprovado">Aprovado</span></td>
-            <td><span class="status aprovado">Aprovado</span></td>
-            <td><span class="status aprovado">Finalizado</span></td>
+            <td>
+                <span class="status andamento">
+                    <?= htmlspecialchars($item['etapa_atual'] ?? 'Não iniciado') ?>
+                </span>
+            </td>
+
+            <td>
+                <?php
+                    $status = $item['status_geral'] ?? 'pendente';
+                    $classe = match($status) {
+                        'finalizado' => 'aprovado',
+                        'em_andamento' => 'andamento',
+                        'reprovado' => 'reprovado',
+                        default => 'pendente'
+                    };
+                ?>
+                <span class="status <?= $classe ?>">
+                    <?= ucfirst(str_replace('_', ' ', $status)) ?>
+                </span>
+            </td>
+
+            <td>
+                <?php if ($item['processo_id']): ?>
+                    <a href="detalhes.php?id=<?= $item['processo_id'] ?>">
+                        Ver
+                    </a>
+                <?php else: ?>
+                    -
+                <?php endif; ?>
+            </td>
         </tr>
+        <?php endforeach; ?>
     </table>
 </div>
 

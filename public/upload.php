@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "../config/conexao.php";
 
 if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
@@ -7,35 +8,69 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
     if (($handle = fopen($arquivoTmp, "r")) !== FALSE) {
 
-        // Pula cabeçalho
+        // Pular cabeçalho
         fgetcsv($handle, 1000, ",");
 
         try {
 
             $pdo->beginTransaction();
 
+            // Revisar para minha tabela e colunas
             $stmt = $pdo->prepare(
-                "INSERT INTO clientes (nome, email, telefone) 
-                 VALUES (:nome, :email, :telefone)"
+                "INSERT INTO cadastros_itens_minimas (codigo, descricao, marca) 
+                 VALUES (:codigo, :descricao, :marca)"
             );
+
+            $contagemMarcas = [
+                'Eliane' => 0,
+                'Decortiles' => 0,
+                'Elizabeth' => 0
+            ];
+
+            $totalImportado = 0;
 
             while (($dados = fgetcsv($handle, 1000, ",")) !== FALSE) {
 
+                $codigo = trim($dados[0]);
+                $descricao = trim($dados[1]);
+                $marca = trim($dados[2]);
+
                 $stmt->execute([
-                    ':nome' => $dados[0],
-                    ':email' => $dados[1],
-                    ':telefone' => $dados[2]
+                    ':codigo' => $codigo,
+                    ':descricao' => $descricao,
+                    ':marca' => $marca
                 ]);
+
+                if (isset($contagemMarcas[$marca])) {
+                    $contagemMarcas[$marca]++;
+                }
+
+                $totalImportado++;
             }
 
             $pdo->commit();
-            echo "Importação realizada com sucesso!";
+
+            $_SESSION['upload_sucesso'] = true;
+            $_SESSION['total'] = $totalImportado;
+            $_SESSION['marcas'] = $contagemMarcas;
+
+            header("Location: cadastro.php");
+            exit;
 
         } catch (Exception $e) {
+
             $pdo->rollBack();
-            echo "Erro ao importar: " . $e->getMessage();
+
+            $_SESSION['upload_erro'] = "Erro ao importar: " . $e->getMessage();
+            header("Location: cadastro.php");
+            exit;
         }
 
         fclose($handle);
     }
+} else {
+
+    $_SESSION['upload_erro'] = "Nenhum arquivo válido enviado.";
+    header("Location: cadastro.php");
+    exit;
 }
