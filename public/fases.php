@@ -47,7 +47,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <td>
                 <span class="status andamento">
-                    <?= htmlspecialchars($item['etapa_atual'] ?? 'Não iniciado') ?>
+                    <?= htmlspecialchars($item['etapa_atual'] ?? 'Inteligência Mercado') ?>
                 </span>
             </td>
 
