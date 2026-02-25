@@ -67,12 +67,13 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </td>
 
             <td>
-                <?php if ($item['processo_id']): ?>
-                    <a href="detalhes.php?id=<?= $item['processo_id'] ?>">
-                        Ver
+                <?php if (!empty($item['processo_id'])): ?>
+                    <a class="btn-detalhes"
+                        href="detalhes.php?id=<?= urlencode($item['processo_id']) ?>">
+                        Ver Detalhes
                     </a>
                 <?php else: ?>
-                    -
+                    <span class="status pendente">Sem Processo</span>
                 <?php endif; ?>
             </td>
         </tr>
