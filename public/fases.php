@@ -9,6 +9,7 @@ SELECT
     i.unidade_fabricacao,
     i.codigo_item,
     i.descricao,
+    i.tamanho_nominal,
     i.marca,
     p.id AS processo_id,
     p.etapa_atual,
@@ -41,7 +42,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <tr>
             <td><?= htmlspecialchars($item['unidade_fabricacao']) ?></td>
             <td><?= htmlspecialchars($item['codigo_item']) ?></td>
-            <td><?= htmlspecialchars($item['descricao']) ?></td>
+            <td><?= htmlspecialchars($item['descricao']) . ' ' . htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
 
             <td>
