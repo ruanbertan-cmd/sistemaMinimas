@@ -1,14 +1,13 @@
 <?php
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/menu.php';
-
 require_once __DIR__ . '/config/conexao.php';
 
 $sql = "
 SELECT 
     i.id AS item_id,
-    i.unidade_fabril,
-    i.codigo,
+    i.unidade_fabricacao,
+    i.codigo_item,
     i.descricao,
     i.marca,
     p.id AS processo_id,
@@ -18,9 +17,9 @@ FROM cadastros_itens_minimas i
 LEFT JOIN itens_processos p ON p.item_id = i.id
 ORDER BY i.id DESC
 ";
-
 $stmt = $pdo->query($sql);
 $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 ?>
 
@@ -40,8 +39,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php foreach ($itens as $item): ?>
         <tr>
-            <td><?= htmlspecialchars($item['unidade_fabril']) ?></td>
-            <td><?= htmlspecialchars($item['codigo']) ?></td>
+            <td><?= htmlspecialchars($item['unidade_fabricacao']) ?></td>
+            <td><?= htmlspecialchars($item['codigo_item']) ?></td>
             <td><?= htmlspecialchars($item['descricao']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
 
