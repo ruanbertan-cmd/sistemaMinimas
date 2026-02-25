@@ -311,3 +311,18 @@ button:hover {
     margin-bottom: 25px;
     color: #7f1d1d;
 }
+
+.btn-detalhes {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #1f1f1f;
+    color: white;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-detalhes:hover {
+    background: #000;
+}
