@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../config/conexao.php";
+require_once __DIR__ . "/config/conexao.php";
 
 if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
@@ -8,18 +8,74 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
     if (($handle = fopen($arquivoTmp, "r")) !== FALSE) {
 
-        // Pular cabeçalho
-        fgetcsv($handle, 1000, ",");
-
         try {
 
             $pdo->beginTransaction();
 
-            // Revisar para minha tabela e colunas
-            $stmt = $pdo->prepare(
-                "INSERT INTO cadastros_itens_minimas (codigo, descricao, marca) 
-                 VALUES (:codigo, :descricao, :marca)"
-            );
+            // Prepare uma vez
+            $stmtItem = $pdo->prepare("
+                INSERT INTO cadastros_itens_minimas (
+                    marca,
+                    categoria_pt_br,
+                    categoria_us,
+                    categoria_es,
+                    serie,
+                    tamanho_nominal,
+                    descricao,
+                    codigo_barras_cx,
+                    superficie_pt_br,
+                    superficie_us,
+                    superficie_es,
+                    junta_assentamento,
+                    abrasao_superficial,
+                    variacao_tonalidade,
+                    unidade_medida,
+                    pecas_caixa,
+                    m2_caixa,
+                    peso_caixa,
+                    coeficiente_atrito,
+                    espessura,
+                    grupo_absorcao,
+                    item_ativo,
+                    cor_pt_br,
+                    cor_us,
+                    cor_es,
+                    recomendado_uso,
+                    local_uso,
+                    retificado,
+                    polo,
+                    lancamento,
+                    estilo,
+                    estilo_us,
+                    estilo_es,
+                    relevo,
+                    rodape,
+                    numeros_face,
+                    tamanho_fabricacao,
+                    codigo_item,
+                    unidade_fabricacao,
+                    monocalibre,
+                    CicloLancamento,
+                    responsavel_carga
+                )
+                VALUES (
+                    ?,?,?,?,?,?,?,?,?,?,
+                    ?,?,?,?,?,?,?,?,?,?,
+                    ?,?,?,?,?,?,?,?,?,?,
+                    ?,?,?,?,?,?,?,?,?,?,
+                    ?,?
+                )
+            ");
+
+            $stmtProcesso = $pdo->prepare("
+                INSERT INTO itens_processos (item_id, etapa_atual, status_geral)
+                VALUES (?, 'comunicacao_analise', 'em_andamento')
+            ");
+
+            $stmtLog = $pdo->prepare("
+                INSERT INTO itens_movimentacoes (processo_id, area, acao, usuario)
+                VALUES (?, 'sistema', 'processo_iniciado', 'upload_csv')
+            ");
 
             $contagemMarcas = [
                 'Eliane' => 0,
@@ -29,17 +85,19 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $totalImportado = 0;
 
+            // APENAS UM WHILE
             while (($dados = fgetcsv($handle, 1000, ",")) !== FALSE) {
 
-                $codigo = trim($dados[0]);
-                $descricao = trim($dados[1]);
-                $marca = trim($dados[2]);
+                $stmtItem->execute($dados);
 
-                $stmt->execute([
-                    ':codigo' => $codigo,
-                    ':descricao' => $descricao,
-                    ':marca' => $marca
-                ]);
+                $itemId = $pdo->lastInsertId();
+
+                $stmtProcesso->execute([$itemId]);
+                $processoId = $pdo->lastInsertId();
+
+                $stmtLog->execute([$processoId]);
+
+                $marca = trim($dados[0]);
 
                 if (isset($contagemMarcas[$marca])) {
                     $contagemMarcas[$marca]++;
@@ -47,6 +105,8 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
                 $totalImportado++;
             }
+
+            fclose($handle);
 
             $pdo->commit();
 
@@ -65,11 +125,8 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
             header("Location: cadastro.php");
             exit;
         }
-
-        fclose($handle);
     }
 } else {
-
     $_SESSION['upload_erro'] = "Nenhum arquivo válido enviado.";
     header("Location: cadastro.php");
     exit;
