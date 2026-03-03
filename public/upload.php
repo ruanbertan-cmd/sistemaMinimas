@@ -73,7 +73,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $stmtLog = $pdo->prepare("
                 INSERT INTO itens_movimentacoes (processo_id, area, acao, usuario)
-                VALUES (?, 'Inteligência de Mercado', 'Processo Iniciado', 'quem carregou o arquivo')
+                VALUES (?, 'Inteligência de Mercado', 'Processo Iniciado', 'usuario')
             "); // Aqui idealmente deveria ser o usuário logado, mas como não temos sistema de login, deixei um placeholder
 
             $contagemMarcas = [
