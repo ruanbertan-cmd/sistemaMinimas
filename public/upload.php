@@ -12,7 +12,6 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $pdo->beginTransaction();
 
-            // Prepare uma vez
             $stmtItem = $pdo->prepare("
                 INSERT INTO cadastros_itens_minimas (
                     marca,
@@ -69,13 +68,13 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $stmtProcesso = $pdo->prepare("
                 INSERT INTO itens_processos (item_id, etapa_atual, status_geral)
-                VALUES (?, 'comunicacao_analise', 'em_andamento')
+                VALUES (?, 'Definição Inicial Comunicação', 'Em Andamento')
             ");
 
             $stmtLog = $pdo->prepare("
                 INSERT INTO itens_movimentacoes (processo_id, area, acao, usuario)
-                VALUES (?, 'sistema', 'processo_iniciado', 'upload_csv')
-            ");
+                VALUES (?, 'Inteligência de Mercado', 'Processo Iniciado', 'quem carregou o arquivo')
+            "); // Aqui idealmente deveria ser o usuário logado, mas como não temos sistema de login, deixei um placeholder
 
             $contagemMarcas = [
                 'Eliane' => 0,
@@ -85,7 +84,6 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $totalImportado = 0;
 
-            // APENAS UM WHILE
             while (($dados = fgetcsv($handle, 1000, ",")) !== FALSE) {
 
                 $stmtItem->execute($dados);
