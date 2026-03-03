@@ -69,7 +69,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td>
                 <?php if (!empty($item['processo_id'])): ?>
                     <a class="btn-detalhes"
-                        href="detalhes.php?id=<?= urlencode($item['processo_id']) ?>">
+                        href="comunicacao.php?id=<?= urlencode($item['processo_id']) ?>">
                         Ver Detalhes
                     </a>
                 <?php else: ?>
