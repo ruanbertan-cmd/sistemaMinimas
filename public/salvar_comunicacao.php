@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $necessitaVideo = isset($_POST['precisa_video']) ? 1 : 0;
     $qtdeVideo = $necessitaVideo ? (int) $_POST['qtd_pecas_video'] : 0;
 
-    $observacaoComunicacao = $_POST['observacao'] ?? '';
+    $observacaoComunicaca = $_POST['observacao'] ?? '';
 
     $proximaEtapa = $_POST['proxima_etapa'];
 
