@@ -35,6 +35,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Marca</th>
             <th>Etapa Atual</th>
             <th>Status Geral</th>
+            <th>Liberar Etapa</th>
             <th>Detalhes</th>
         </tr>
 
@@ -68,13 +69,33 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <td>
                 <?php if (!empty($item['processo_id'])): ?>
-                    <a class="btn-detalhes"
-                        href="comunicacao.php?id=<?= urlencode($item['processo_id']) ?>">
-                        Ver Detalhes
-                    </a>
-                <?php else: ?>
-                    <span class="status pendente">Sem Processo</span>
-                <?php endif; ?>
+
+                <?php
+                $paginaEtapa = match ($item['etapa_atual']) {
+                    'comunicacao' => 'comunicacao.php',
+                    'detec' => 'detec.php',
+                    'fotografia' => 'fotografia.php',
+                    'design' => 'design.php'
+                };
+                ?>
+
+                <a class="btn-detalhes"
+                href="<?= $paginaEtapa ?>?id=<?= urlencode($item['processo_id']) ?>">
+                Liberar
+                </a>
+            </td>
+
+            <td>
+                <?php if (!empty($item['processo_id'])): ?>
+                <a class="btn-detalhes"
+                href="detalhes.php?id=<?= urlencode($item['processo_id']) ?>">
+                Ver Detalhes
+                </a>
+            </td>
+            <?php else: ?>
+            <span class="status pendente">Sem Processo</span>
+            <?php endif; ?>
+            <?php endif; ?>
             </td>
         </tr>
         <?php endforeach; ?>

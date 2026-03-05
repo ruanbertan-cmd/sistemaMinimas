@@ -41,7 +41,7 @@ if (!$item) {
 
 /* Buscar histórico */
 $sqlLog = "
-SELECT area, acao, usuario, observacao, data_acao
+SELECT area_origem, area_destino, acao, usuario, observacao, data_acao
 FROM itens_movimentacoes
 WHERE processo_id = :id
 ORDER BY data_acao ASC
@@ -76,7 +76,8 @@ $logs = $stmtLog->fetchAll();
 
         <?php foreach ($logs as $log): ?>
         <tr>
-            <td><?= e($log['area']) ?></td>
+            <td><?= e($log['area_origem']) ?></td>
+            <td><?= e($log['area_destino']) ?></td>
             <td><?= e($log['acao']) ?></td>
             <td><?= e($log['usuario']) ?></td>
             <td><?= e($log['observacao']) ?></td>

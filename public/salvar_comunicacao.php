@@ -5,11 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $processoId = (int) $_POST['processo_id'];
 
-    $necessitaFoto = isset($_POST['necessita_foto']) ? 1 : 0;
-    $qtdeFoto = $necessitaFoto ? (int) $_POST['qtde_foto'] : 0;
+    $necessitaFoto = isset($_POST['precisa_foto']) ? 1 : 0;
+    $qtdeFoto = $necessitaFoto ? (int) $_POST['qtd_pecas_foto'] : 0;
 
-    $necessitaVideo = isset($_POST['necessita_video']) ? 1 : 0;
-    $qtdeVideo = $necessitaVideo ? (int) $_POST['qtde_video'] : 0;
+    $necessitaVideo = isset($_POST['precisa_video']) ? 1 : 0;
+    $qtdeVideo = $necessitaVideo ? (int) $_POST['qtd_pecas_video'] : 0;
+
+    $observacaoComunicacao = $_POST['observacao'] ?? '';
 
     $proximaEtapa = $_POST['proxima_etapa'];
 
@@ -19,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Atualiza processo
         $stmt = $pdo->prepare("
-            UPDATE itens_processos
+            UPDATE processo_comunicacao
             SET 
-                necessita_foto = ?,
-                qtde_foto = ?,
-                necessita_video = ?,
-                qtde_video = ?,
-                etapa_atual = ?
+                precisa_foto = ?,
+                qtd_pecas_foto = ?,
+                precisa_video = ?,
+                qtd_pecas_video = ?,
+                observacao = ?
             WHERE id = ?
         ");
 
@@ -34,18 +36,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $qtdeFoto,
             $necessitaVideo,
             $qtdeVideo,
-            $proximaEtapa,
+            $observacaoComunicacao,
             $processoId
         ]);
 
         // Log
         $stmtLog = $pdo->prepare("
-            INSERT INTO itens_movimentacoes
-            (processo_id, area, acao, usuario)
-            VALUES (?, 'comunicacao', 'liberou_processo', 'usuario_sistema')
+            UPDATE itens_processos
+            SET etapa_atual = ?,
+            status_geral = 'em_andamento'
+            WHERE id = ?
         ");
 
-        $stmtLog->execute([$processoId]);
+        $stmtLog->execute([
+            $proximaEtapa,
+            $processoId
+        ]);
 
         $pdo->commit();
 

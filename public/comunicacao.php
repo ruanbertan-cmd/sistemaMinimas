@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/menu.php';
 require_once __DIR__ . '/config/conexao.php';
+require_once __DIR__ . '/includes/etapas.php';
 
 if (!isset($_GET['id'])) {
     die("Processo não informado.");
@@ -18,7 +19,8 @@ $stmt = $pdo->prepare("
         i.codigo_item,
         i.descricao,
         i.marca,
-        i.unidade_fabricacao
+        i.unidade_fabricacao,
+        i.numeros_face
     FROM itens_processos p
     INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
     WHERE p.id = ?
@@ -41,6 +43,7 @@ if (!$processo) {
         <p><strong>Descrição:</strong> <?= htmlspecialchars($processo['descricao']) ?></p>
         <p><strong>Marca:</strong> <?= htmlspecialchars($processo['marca']) ?></p>
         <p><strong>Unidade:</strong> <?= htmlspecialchars($processo['unidade_fabricacao']) ?></p>
+        <p><strong>Números de Faces:</strong> <?= $processo['numeros_face'] ?></p>
     </div>
 
     <div class="card">
@@ -52,29 +55,27 @@ if (!$processo) {
 
             <div class="form-group">
                 <label>
-                    <input type="checkbox" name="necessita_foto" value="1">
+                    <input type="checkbox" name="precisa_foto" value="1">
                     Precisa de Foto
                 </label>
-                <input type="number" name="qtde_foto" placeholder="Quantidade">
+                <input type="number" name="qtd_pecas_foto" placeholder="Quantidade">
             </div>
 
             <div class="form-group">
                 <label>
-                    <input type="checkbox" name="necessita_video" value="1">
+                    <input type="checkbox" name="precisa_video" value="1">
                     Precisa de Vídeo
                 </label>
-                <input type="number" name="qtde_video" placeholder="Quantidade">
+                <input type="number" name="qtd_pecas_video" placeholder="Quantidade"><br><br>
+
+                 <label for="observacao">Observação:</label>
+                 <input type="text" name="observacao" placeholder="Observação">
             </div>
 
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <select name="proxima_etapa" required>
-                    <option value="">Selecione</option>
-                    <option value="detec">Detec</option>
-                    <option value="fotografia">Fotografia</option>
-                    <option value="design">Design</option>
-                </select>
+                <?= selectEtapas() ?>
             </div>
 
             <button type="submit">Liberar Processo</button>
