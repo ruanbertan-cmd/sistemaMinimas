@@ -5,13 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $processoId = (int) $_POST['processo_id'];
 
-    $necessitaFoto = isset($_POST['precisa_foto']) ? 1 : 0;
-    $qtdeFoto = $necessitaFoto ? (int) $_POST['qtd_pecas_foto'] : 0;
+    $precisa_foto = isset($_POST['precisa_foto']) ? 1 : 0;
+    $qtd_pecas_foto = $precisa_foto ? (int) $_POST['qtd_pecas_foto'] : 0;
 
-    $necessitaVideo = isset($_POST['precisa_video']) ? 1 : 0;
-    $qtdeVideo = $necessitaVideo ? (int) $_POST['qtd_pecas_video'] : 0;
+    $precisa_video = isset($_POST['precisa_video']) ? 1 : 0;
+    $qtd_pecas_video = $precisa_video ? (int) $_POST['qtd_pecas_video'] : 0;
 
-    $observacaoComunicaca = $_POST['observacao'] ?? '';
+    $observacaoComunicacao = $_POST['observacao'] ?? '';
 
     $proximaEtapa = $_POST['proxima_etapa'];
 
@@ -19,28 +19,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->beginTransaction();
 
-        // Atualiza processo
+        // Registro info comunicação
         $stmt = $pdo->prepare("
-            UPDATE processo_comunicacao
-            SET 
-                precisa_foto = ?,
-                qtd_pecas_foto = ?,
-                precisa_video = ?,
-                qtd_pecas_video = ?,
-                observacao = ?
-            WHERE id = ?
+            INSERT INTO processo_comunicacao
+            (processo_id, precisa_foto, qtd_pecas_foto, precisa_video, qtd_pecas_video, observacao)
+            VALUES (?,?,?,?,?,?)
         ");
 
         $stmt->execute([
-            $necessitaFoto,
-            $qtdeFoto,
-            $necessitaVideo,
-            $qtdeVideo,
-            $observacaoComunicacao,
-            $processoId
+            $processoId,
+            $precisa_foto,
+            $qtd_pecas_foto,
+            $precisa_video,
+            $qtd_pecas_video,
+            $observacaoComunicacao
+            
         ]);
 
-        // Log
+        // Salvando fase Atual para Atualizacao Log posteriormente
+
+        $stmtEtapaAtual = $pdo->prepare("
+            SELECT etapa_atual,
+            FROM itens_processos,
+            WHERE id = ?
+        ");
+        $stmtEtapaAtual->execute([$processoId]);
+        $stmtEtapaAtual = $stmtEtapaAtual->fetchColumn();
+
+        // Atualizando fase do item para a nova
         $stmtLog = $pdo->prepare("
             UPDATE itens_processos
             SET etapa_atual = ?,
@@ -51,6 +57,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtLog->execute([
             $proximaEtapa,
             $processoId
+        ]);
+
+        // Salvando log da alteracao de fase
+
+        $stmtLog = $pdo->prepare("
+            INSERT INTO itens_movimentacoes
+            (processo_id, area_origem, area_destino, acao, usuario, observacao)
+            VALUES (?,?,?,?,?,?)
+        ");
+
+        $stmt->execute([
+            $processoId,
+            $etapaAtual,
+            $proximaEtapa,
+            'liberacao_etapa',
+            'usuarioSistema',
+            $observacaoComunicacao
+
         ]);
 
         $pdo->commit();
