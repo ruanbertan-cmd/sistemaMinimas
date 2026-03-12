@@ -75,7 +75,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'comunicacao' => 'comunicacao.php',
                     'detec' => 'detec.php',
                     'fotografia' => 'fotografia.php',
-                    'design' => 'design.php'
+                    'inteligencia de mercado' => 'inteligenciaMercado.php',
+                    'designers' => 'designers.php'
                 };
                 ?>
 
