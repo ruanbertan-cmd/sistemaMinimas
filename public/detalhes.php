@@ -67,7 +67,8 @@ $logs = $stmtLog->fetchAll();
 
     <table>
         <tr>
-            <th>Área</th>
+            <th>Área Origem</th>
+            <th>Área Destino</th>
             <th>Ação</th>
             <th>Usuário</th>
             <th>Observação</th>
