@@ -18,6 +18,7 @@ $stmt = $pdo->prepare("
         p.status_geral,
         i.codigo_item,
         i.descricao,
+        i.tamanho_nominal,
         i.marca,
         i.unidade_fabricacao,
         i.numeros_face
@@ -40,7 +41,7 @@ if (!$processo) {
     <div class="card">
         <h3>Informações do Item</h3>
         <p><strong>Código:</strong> <?= htmlspecialchars($processo['codigo_item']) ?></p>
-        <p><strong>Descrição:</strong> <?= htmlspecialchars($processo['descricao']) ?></p>
+        <p><strong>Descrição:</strong> <?= htmlspecialchars($processo['descricao'] . ' ' . $processo['tamanho_nominal'])?></p>
         <p><strong>Marca:</strong> <?= htmlspecialchars($processo['marca']) ?></p>
         <p><strong>Unidade:</strong> <?= htmlspecialchars($processo['unidade_fabricacao']) ?></p>
         <p><strong>Números de Faces:</strong> <?= $processo['numeros_face'] ?></p>
