@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $processoId = (int) $_POST['processo_id'];
 
-    $proximaEtapa = $_POST['metodo_imagem'];
+    $metodo_imagem = $_POST['metodo_imagem'];
 
     $precisa_foto = isset($_POST['precisa_foto']) ? 1 : 0;
     $qtd_pecas_foto = $precisa_foto ? (int) $_POST['qtd_pecas_foto'] : 0;
@@ -47,22 +47,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Salvando fase Atual para Atualizacao Log posteriormente
 
         $stmtEtapaAtual = $pdo->prepare("
-            SELECT etapa_atual,
-            FROM itens_processos,
+            SELECT etapa_atual
+            FROM itens_processos
             WHERE id = ?
         ");
         $stmtEtapaAtual->execute([$processoId]);
-        $stmtEtapaAtual = $stmtEtapaAtual->fetchColumn();
+        $etapaAtual = $stmtEtapaAtual->fetchColumn();
 
-        // Atualizando fase do item para a nova
-        $stmtLog = $pdo->prepare("
+        // Atualizando etapda do item para a nova
+        $stmtupdate = $pdo->prepare("
             UPDATE itens_processos
             SET etapa_atual = ?,
             status_geral = 'em_andamento'
             WHERE id = ?
         ");
 
-        $stmtLog->execute([
+        $stmtupdate->execute([
             $proximaEtapa,
             $processoId
         ]);
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES (?,?,?,?,?,?)
         ");
 
-        $stmt->execute([
+        $stmtLog->execute([
             $processoId,
             $etapaAtual,
             $proximaEtapa,
