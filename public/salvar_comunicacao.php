@@ -5,8 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $processoId = (int) $_POST['processo_id'];
 
+    $proximaEtapa = $_POST['metodo_imagem'];
+
     $precisa_foto = isset($_POST['precisa_foto']) ? 1 : 0;
     $qtd_pecas_foto = $precisa_foto ? (int) $_POST['qtd_pecas_foto'] : 0;
+
+    $precisa_manipulacao = isset($_POST['precisa_manipulacao']) ? 1 : 0;
+    $qtd_pecas_manipulacao = $precisa_manipulacao ? (int) $_POST['qtd_pecas_manipulacao'] : 0;
 
     $precisa_video = isset($_POST['precisa_video']) ? 1 : 0;
     $qtd_pecas_video = $precisa_video ? (int) $_POST['qtd_pecas_video'] : 0;
@@ -22,14 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Registro info comunicação
         $stmt = $pdo->prepare("
             INSERT INTO processo_comunicacao
-            (processo_id, precisa_foto, qtd_pecas_foto, precisa_video, qtd_pecas_video, observacao)
+            (processo_id, metodo_imagem, precisa_foto, qtd_pecas_foto, precisa_manipulacao, qtd_pecas_manipulacao, precisa_video, qtd_pecas_video, observacao)
             VALUES (?,?,?,?,?,?)
         ");
 
         $stmt->execute([
             $processoId,
+            $metodo_imagem,
             $precisa_foto,
             $qtd_pecas_foto,
+            $precisa_manipulacao,
+            $qtd_pecas_manipulacao,
             $precisa_video,
             $qtd_pecas_video,
             $observacaoComunicacao
