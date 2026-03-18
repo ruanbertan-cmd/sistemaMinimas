@@ -51,9 +51,17 @@ if (!$processo) {
 
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
-            <h3>Necessidades</h3>
-
             <div class="form-group">
+                <label for="metodoImagem">Procedimento Imagem Still</label>
+                <select name="metodo_imagem" id="metodoImagem" required>
+                    <option value=""></option>
+                    <option value="totalmenteFotografado">Totalmente Fotografado</option>
+                    <option value="fotografadoManipulado">Fotografado e Manipulado</option>
+                    <option value="totalmenteManipulado">Totalmente Manipulado</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="blocoFoto">
                 <label>
                     <input type="checkbox" name="precisa_foto" value="1">
                     Precisa de Foto
@@ -61,7 +69,15 @@ if (!$processo) {
                 <input type="number" name="qtd_pecas_foto" placeholder="Quantidade">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="blocoManipulacao">
+                <label>
+                    <input type="checkbox" name="precisa_manipulacao" value="1">
+                    Precisa de Manipulação
+                </label>
+                <input type="number" name="qtd_pecas_manipulacao" placeholder="Quantidade">
+            </div>
+
+            <div class="form-group" id="blocoVideo">
                 <label>
                     <input type="checkbox" name="precisa_video" value="1">
                     Precisa de Vídeo
@@ -77,10 +93,47 @@ if (!$processo) {
             <div class="form-group">
                 <?= selectEtapas() ?>
             </div>
-
             <button type="submit">Liberar Processo</button>
         </form>
     </div>
 </div>
+
+<script>
+
+document.getElementById('blocoFoto').style.display = 'none';
+document.getElementById('blocoManipulacao').style.display = 'none';
+document.getElementById('blocoVideo').style.display = 'none';
+
+document.getElementById('metodoImagem').addEventListener('change', function() {
+
+    const valor = this.value;
+
+    const blocoFoto = document.getElementById('blocoFoto');
+    const blocoManipulacao = document.getElementById('blocoManipulacao');
+    const blocoVideo = document.getElementById('blocoVideo');
+
+    // Reset
+    blocoFoto.style.display = 'none';
+    blocoManipulacao.style.display = 'none';
+    blocoVideo.style.display = 'none';
+
+    if (valor === 'totalmenteFotografado') {
+        blocoFoto.style.display = 'block';
+        blocoVideo.style.display = 'block';
+    }
+
+    if (valor === 'totalmenteManipulado') {
+        blocoManipulacao.style.display = 'block';
+        blocoVideo.style.display = 'block';
+    }
+
+    if (valor === 'fotografadoManipulado') {
+        blocoFoto.style.display = 'block';
+        blocoManipulacao.style.display = 'block';
+        blocoVideo.style.display = 'block';
+    }
+
+});
+</script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
