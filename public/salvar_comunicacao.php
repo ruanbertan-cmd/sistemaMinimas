@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("
             INSERT INTO processo_comunicacao
             (processo_id, metodo_imagem, precisa_foto, qtd_pecas_foto, precisa_manipulacao, qtd_pecas_manipulacao, precisa_video, qtd_pecas_video, observacao)
-            VALUES (?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?)
         ");
 
         $stmt->execute([
