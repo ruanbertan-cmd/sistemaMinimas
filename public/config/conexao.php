@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('America/Sao_Paulo');
+
 $host = "db"; // nome do serviço no docker
 $db   = "sistema_minimas";
 $user = "root";
