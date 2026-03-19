@@ -14,6 +14,13 @@ $stmt = $pdo->query("
     GROUP BY etapa_atual
 ");
 
+$stmtFinalizados = $pdo->query("
+    SELECT COUNT(*) FROM itens_processos
+    WHERE status_geral = 'finalizado'
+");
+
+$totalFinalizados = $stmtFinalizados->fetchColumn();
+
 $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $contagem = [];
@@ -60,6 +67,13 @@ foreach ($dados as $linha) {
             <h3>Fotografia</h3>
             <div class="numero">
                 <?= $contagem['fotografia'] ?? 0 ?>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Total Finalizados</h3>
+            <div class="numero">
+                <?= $totalFinalizados ?? 0 ?>
             </div>
         </div>
     </div>
