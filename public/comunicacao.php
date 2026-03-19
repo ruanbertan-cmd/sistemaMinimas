@@ -73,8 +73,14 @@ if (!$processo) {
             <div class="form-group" id="blocoManipulacao">
                 <label>
                     <input type="checkbox" name="precisa_manipulacao" value="1">
-                    Precisa de Manipulação
+                        Precisa de Manipulação
                 </label>
+                    <select name="detalhe_manipulacao" id="detalheManipulacao" required>
+                        <option value="">Selecione</option>
+                        <option value="Faces Distintas">Todas Faces Distintas</option>
+                        <option value="Faces Aleatorias">Faces podem ser aleatórias</option>
+                    </select>
+
                 <input type="number" name="qtd_pecas_manipulacao" placeholder="Quantidade">
             </div>
 
