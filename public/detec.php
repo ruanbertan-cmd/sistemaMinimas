@@ -79,8 +79,8 @@ if (!$processo) {
                     if (!empty($processo['precisa_foto']) && (int)$processo['qtd_pecas_foto'] > 0):
 
                         $descricaoFoto = ($metodo === 'totalmenteFotografado')
-                            ? 'Todas as faces distintas'
-                            : 'Peças aleatórias';
+                            ? 'Faces distintas'
+                            : 'Faces aleatórias';
 
                     ?>
                         <li>
@@ -116,7 +116,8 @@ if (!$processo) {
                 <select name="metodo_detec" id="metodoDetec" required>
                     <option value=""></option>
                     <?php
-                    if ($metodo === 'totalmenteFotografado' || $processo['detalhe_manipulacao'] === 'Todas Faces Distintas'):
+                    //validação para mostrar apenas a opção "Ok, peças separadas, identificadas e enviadas para a Amostra" quando o método for "totalmenteFotografado" ou "Faces Distintas"
+                    if ($metodo === 'totalmenteFotografado' || $processo['detalhe_manipulacao'] === 'Faces Distintas'):
                         echo '<option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>'; ?>
                     <?php else: ?>
                         <option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>
@@ -133,13 +134,7 @@ if (!$processo) {
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <?php
-                if ($metodo === 'totalmenteFotografado' || $processo['detalhe_manipulacao'] === 'Todas Faces Distintas'):
-                    echo "<p>Próxima etapa: </p>"; ?>
-                    <?= selectEtapas('') ?>
-                <?php else: ?>
-                    <?= selectEtapas() ?>
-                <?php endif; ?>
+                <?= selectEtapas() ?>
             </div>
             <button type="submit">Liberar Processo</button>
         </form>
