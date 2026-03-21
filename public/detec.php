@@ -104,7 +104,7 @@ if (!$processo) {
                     if (!empty($processo['precisa_video']) && (int)$processo['qtd_pecas_video'] > 0):
                     ?>
                         <li>
-                            Vídeo: <?= $processo['qtd_pecas_video'] ?>
+                            Vídeo: <?= $processo['qtd_pecas_video'] . ' - Peças aleatórias'?>
                         </li>
                     <?php endif; ?>
 
@@ -115,8 +115,13 @@ if (!$processo) {
                 <label for="metodoDetec">Procedimento Detec</label>
                 <select name="metodo_detec" id="metodoDetec" required>
                     <option value=""></option>
-                    <option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>
-                    <option value="separadoAmostra">Item ja em estoque, seguir com separação das mesmas</option>
+                    <?php
+                    if ($metodo === 'totalmenteFotografado' || $processo['detalhe_manipulacao'] === 'Todas Faces Distintas'):
+                        echo '<option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>'; ?>
+                    <?php else: ?>
+                        <option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>
+                        <option value="separadoAmostra">Item ja produzido, seguir com separação das mesmas pelo Depto. Amostra</option>
+                    <?php endif; ?>
                 </select>
             </div>
 
@@ -128,7 +133,13 @@ if (!$processo) {
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <?= selectEtapas() ?>
+                <?php
+                if ($metodo === 'totalmenteFotografado' || $processo['detalhe_manipulacao'] === 'Todas Faces Distintas'):
+                    echo "<p>Próxima etapa: </p>"; ?>
+                    <?= selectEtapas('') ?>
+                <?php else: ?>
+                    <?= selectEtapas() ?>
+                <?php endif; ?>
             </div>
             <button type="submit">Liberar Processo</button>
         </form>
