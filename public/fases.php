@@ -74,6 +74,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $paginaEtapa = match ($item['etapa_atual']) {
                     'comunicacao' => 'comunicacao.php',
                     'detec' => 'detec.php',
+                    'amostra' => 'amostra.php',
                     'fotografia' => 'fotografia.php',
                     'inteligencia de mercado' => 'inteligenciaMercado.php',
                     'designers' => 'designers.php'
