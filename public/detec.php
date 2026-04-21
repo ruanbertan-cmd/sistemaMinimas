@@ -128,7 +128,7 @@ if (!$processo) {
 
             <div class="form-group" id="blocoVideo">
                  <label for="observacao">Observação:</label>
-                 <input type="text" name="observacao" placeholder="Observação">
+                 <input type="text" name="observacao_detec" placeholder="Observação">
             </div>
 
             <h3>Próxima Etapa</h3>
