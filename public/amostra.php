@@ -68,15 +68,14 @@ if (!$processo) {
     </div>
 
     <div class="card">
-        <form action="salvar_detec.php" method="POST">
+        <form action="salvar_amostra.php" method="POST">
 
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
-            <h1>Seguir com a orientação passada pelo Depto. Detec</h1>
+            <h1>Seguir com processos definidos anteriormente</h1>
 
             <div class="form-group">
                 <p>Quantidade de peças necessárias:</p>
-                
                     <ul>
 
                     <?php 
