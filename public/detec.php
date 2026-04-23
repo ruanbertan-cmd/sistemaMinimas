@@ -130,14 +130,27 @@ if (!$processo) {
                  <label for="observacao">Observação:</label>
                  <input type="text" name="observacao_detec" placeholder="Observação">
             </div>
-
-            <h3>Próxima Etapa</h3>
-
-            <div class="form-group">
-                <?= selectEtapas() ?>
+            </div>
+            <div>
+                <input type="hidden" name="proxima_etapa" id="proxima_etapa">
             </div>
             <button type="submit">Liberar Processo</button>
         </form>
+
+<script>
+//Script para atualizar a próxima etapa automaticamente com base na escolha do procedimento Detec
+document.getElementById('metodoDetec').addEventListener('change', function() {
+    const etapahidden = document.getElementById('proxima_etapa');
+    if (this.value === 'separadoDetec') {
+        etapahidden.value = 'inteligencia_mercado';
+    } else if (this.value === 'separadoAmostra') {
+        etapahidden.value = 'amostra';
+    } else {
+        etapahidden.value = '';
+    }
+});
+</script>
+
     </div>
 </div>
 
