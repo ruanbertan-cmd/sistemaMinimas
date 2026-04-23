@@ -117,9 +117,15 @@ if (!$processo) {
                     <option value=""></option>
                     <?php
                     //validação para mostrar apenas a opção "Ok, peças separadas, identificadas e enviadas para a Amostra" quando o método for "totalmenteFotografado" ou "Faces Distintas"
-                    if ($metodo === 'totalmenteFotografado' || $processo['detalhe_manipulacao'] === 'Faces Distintas'):
+                    
+                    $precisaFoto = !empty($processo['precisa_foto']) && (int)$processo['qtd_pecas_foto'] > 0;
+                    $precisaManipulacaoFaces = !empty($processo['precisa_manipulacao']) && (int)$processo['qtd_pecas_manipulacao'] > 0 && $processo['detalhe_manipulacao'] === 'Faces Distintas';
+
+                    if ($precisaFoto || $precisaManipulacaoFaces):
+                        // Travar: só pode seguir com a opção de peças separadas pelo Detec
                         echo '<option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>'; ?>
                     <?php else: ?>
+                        // Se não tiver a necessidade de foto ou manipulação com faces distintas, liberar ambas as opções
                         <option value="separadoDetec">Ok, peças separadas, identificadas e enviadas para a Amostra</option>
                         <option value="separadoAmostra">Item ja produzido, seguir com separação das mesmas pelo Depto. Amostra</option>
                     <?php endif; ?>
