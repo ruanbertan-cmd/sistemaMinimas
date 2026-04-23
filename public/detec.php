@@ -49,7 +49,7 @@ if (!$processo) {
 ?>
 
 <div class="container">
-    <h1>Liberação - Comunicação</h1>
+    <h1>Liberação - Detec</h1>
 
     <div class="card">
         <h3>Informações do Item</h3>
