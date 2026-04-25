@@ -104,7 +104,7 @@ if (!$processo) {
                     if (!empty($processo['precisa_video']) && (int)$processo['qtd_pecas_video'] > 0):
                     ?>
                         <li>
-                            Vídeo: <?= $processo['qtd_pecas_video'] . ' - Peças aleatórias'?>
+                            Vídeo: <?= $processo['qtd_pecas_video'] . ' - Faces Aleatórias'?>
                         </li>
                     <?php endif; ?>
 
