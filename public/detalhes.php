@@ -3,6 +3,8 @@ require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/menu.php';
 require_once __DIR__ . '/../config/conexao.php';
 
+date_default_timezone_set('America/Sao_Paulo');
+
 function e($valor) {
     return htmlspecialchars((string)($valor ?? ''));
 }

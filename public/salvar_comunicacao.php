@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/conexao.php';
 
+date_default_timezone_set('America/Sao_Paulo');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $processoId = (int) $_POST['processo_id'];
