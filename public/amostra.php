@@ -73,23 +73,28 @@ if (!$processo) {
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
             <h1>Seguir com processos definidos anteriormente</h1>
-
             <div class="form-group">
                 <p>Quantidade de peças necessárias:</p>
                     <ul>
-
-                    <?php 
-                    $metodo = $processo['metodo_detec'] ?? null;
-
-                    // DETEC
-
-                    if ($metodo === 'separadoDetec' || $metodo === 'separadoAmostra'):
-                        echo '<li>Peças Separadas pelo Depto. Detec</li>';
+                    <?php
+                    $metodo = $processo['metodo_imagem'] ?? null;
+                    $precisaFoto = !empty($processo['precisa_foto']) && (int)$processo['qtd_pecas_foto'] > 1;
+                    $precisaManipulacaoFaces = !empty($processo['precisa_manipulacao']) && (int)$processo['qtd_pecas_manipulacao'] > 0 && $processo['detalhe_manipulacao'] === 'Faces Aleatórias';
+                    $precisaVideo = !empty($processo['precisa_video']) && (int)$processo['qtd_pecas_video'] > 0;
+                    if ($precisaFoto || $precisaManipulacaoFaces || $precisaVideo):
+                        if ($precisaFoto) {
+                            echo "<li>Foto Still: {$processo['qtd_pecas_foto']} peças</li>";
+                        }
+                        if ($precisaManipulacaoFaces) {
+                            echo "<li>Manipulação Faces Aleatorias: {$processo['qtd_pecas_manipulacao']} peças</li>";
+                        }
+                        if ($precisaVideo) {
+                            echo "<li>Vídeo: {$processo['qtd_pecas_video']} peças</li>";
+                        }
                     endif;
-                    
                     ?>
-                    </ul>
-                </div>
+                </ul>
+            </div>
 
             <div class="form-group" id="blocoVideo">
                  <label for="observacao">Observação:</label>
@@ -99,7 +104,8 @@ if (!$processo) {
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <?= selectEtapas() ?>
+                <input type="hidden" name="proxima_etapa" value="inteligencia_mercado">
+                <p>Após clicar em liberar processo, o mesmo seguirá para a etapa de Inteligência de Mercado</p>
             </div>
             <button type="submit">Liberar Processo</button>
         </form>
