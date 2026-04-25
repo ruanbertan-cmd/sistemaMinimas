@@ -117,7 +117,7 @@ if (!$processo) {
                     <option value=""></option>
                     <?php
         
-                    $precisaFoto = !empty($processo['precisa_foto']) && (int)$processo['qtd_pecas_foto'] > 0;
+                    $precisaFoto = !empty($processo['precisa_foto']) && (int)$processo['qtd_pecas_foto'] > 1;
                     $precisaManipulacaoFaces = !empty($processo['precisa_manipulacao']) && (int)$processo['qtd_pecas_manipulacao'] > 0 && $processo['detalhe_manipulacao'] === 'Faces Distintas';
 
                     if ($precisaFoto || $precisaManipulacaoFaces):
