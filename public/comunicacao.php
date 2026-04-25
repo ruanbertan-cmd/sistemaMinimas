@@ -78,7 +78,7 @@ if (!$processo) {
                     <select name="detalhe_manipulacao" id="detalheManipulacao" if('precisa_mainipulacao' == 1) required>
                         <option value="">Selecione</option>
                         <option value="Faces Distintas">Todas Faces Distintas</option>
-                        <option value="Faces Aleatorias">Faces podem ser aleatórias</option>
+                        <option value="Faces Aleatórias">Faces podem ser aleatórias</option>
                     </select>
 
                 <input type="number" name="qtd_pecas_manipulacao" placeholder="Quantidade">
