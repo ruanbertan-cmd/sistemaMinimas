@@ -38,7 +38,7 @@ foreach ($dados as $linha) {
         <div class="card">
                 <h3>Inteligência de Mercado</h3>
             <div class="numero">
-                <?= $contagem['inteligencia_de_mercado'] ?? 0 ?>
+                <?= $contagem['inteligencia_mercado'] ?? 0 ?>
             </div>
         </div>
 
