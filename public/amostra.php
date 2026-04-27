@@ -72,7 +72,7 @@ if (!$processo) {
 
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
-            <h1>Seguir com processos definidos anteriormente</h1>
+            <h1>Seguir com processos definidos</h1>
             <div class="form-group">
                 <p>Quantidade de peças necessárias:</p>
                     <ul>
@@ -96,15 +96,23 @@ if (!$processo) {
                 </ul>
             </div>
 
-            <div class="form-group" id="blocoVideo">
+            <div class="form-group">
+                <label for="metodoAmostra">Procedimento Amostra</label>
+                <select name="metodo_amostra" id="metodoAmostra" required>
+                    <option value=""></option>
+                    <option value="separadoPecas">Ok, Itens separados</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                  <label for="observacao">Observação:</label>
-                 <input type="text" name="observacao" placeholder="Observação">
+                 <input type="text" name="observacao_amostra" placeholder="Observação">
             </div>
 
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <input type="hidden" name="proxima_etapa" value="inteligencia_mercado">
+                <input type="hidden" name="proxima_etapa_amostra" value="inteligencia_mercado">
                 <p>Após clicar em liberar processo, o mesmo seguirá para a etapa de Inteligência de Mercado</p>
             </div>
             <button type="submit">Liberar Processo</button>
