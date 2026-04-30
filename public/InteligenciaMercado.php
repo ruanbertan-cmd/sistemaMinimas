@@ -73,7 +73,7 @@ if (!$processo) {
     </div>
 
     <div class="card">
-        <form action="salvar_amostra.php" method="POST">
+        <form action="salvar_inteligenciaMercado.php" method="POST">
 
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
@@ -82,29 +82,29 @@ if (!$processo) {
             <div class="form-group" id="blocoChecagem">
                 Produto encontrado na amostra?
                 <label>
-                    <input type="checkbox" name="precisa_foto" value="1">
+                    <input type="checkbox" name="pecas_separadas" value="1">
                 </label>
 
                 Quantidade de acordo com o solicitado?
                 <label>
-                    <input type="checkbox" name="precisa_foto" value="1">
+                    <input type="checkbox" name="qtd_de_acordo" value="1">
                 </label>
 
                 Qualidade de acordo com o esperado (Sem lascas ou arranhados no desenho)?
                 <label>
-                    <input type="checkbox" name="precisa_foto" value="1">
+                    <input type="checkbox" name="qualidade" value="1">
                 </label>
                 
                 Identificação correta (Nome dos produtos escrito nas peças)?
                 <label>
-                    <input type="checkbox" name="precisa_foto" value="1">
+                    <input type="checkbox" name="identificacao" value="1">
                 </label>
 
             </div>
 
             <div class="form-group">
                  <label for="observacao">Observação:</label>
-                 <input type="text" name="observacao_amostra" placeholder="Observação">
+                 <input type="text" name="observacao_inteligenciaMercado" placeholder="Observação">
             </div>
 
             <h3>Próxima Etapa</h3>
