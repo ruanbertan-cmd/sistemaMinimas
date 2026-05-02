@@ -3,12 +3,23 @@ require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/menu.php';
 require_once __DIR__ . '/../config/conexao.php';
 require_once __DIR__ . '/includes/etapas.php';
+require_once __DIR__ . '/voltarEtapas.php';
 
 if (!isset($_GET['id'])) {
     die("Processo não informado.");
 }
 
 $processoId = (int) $_GET['id'];
+
+// Se o usuário clicou em "Voltar Etapa"
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'voltar') {
+    try {
+        $novaEtapa = voltarEtapa($pdo, $processoId, 'usuarioSistema', 'Voltando etapa por revisão');
+        echo "<div class='alert'>Processo voltou para etapa: $novaEtapa</div>";
+    } catch (Exception $e) {
+        echo "<div class='alert error'>Erro: " . $e->getMessage() . "</div>";
+    }
+}
 
 // Buscar dados do processo + item
 $stmt = $pdo->prepare("
@@ -116,6 +127,10 @@ if (!$processo) {
                 <p>Após clicar em liberar processo, o mesmo seguirá para a etapa de Inteligência de Mercado</p>
             </div>
             <button type="submit">Liberar Processo</button>
+        </form>
+        <form method="POST">
+            <input type="hidden" name="acao" value="voltar">
+            <button type="submit">Voltar Etapa</button>
         </form>
     </div>
 </div>
