@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/menu.php';
-require_once __DIR__ . '/../config/conexao.php';
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/menu.php';
+require_once __DIR__ . '/../../../config/conexao.php';
 
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -90,4 +90,4 @@ $logs = $stmtLog->fetchAll();
     </table>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>

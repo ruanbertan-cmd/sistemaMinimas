@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/menu.php';
-require_once __DIR__ . '/../config/conexao.php';
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/menu.php';
+require_once __DIR__ . '/../../../config/conexao.php';
 
 $sql = "
 SELECT 
@@ -72,12 +72,12 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php
                 $paginaEtapa = match ($item['etapa_atual']) {
-                    'comunicacao' => 'comunicacao.php',
-                    'detec' => 'detec.php',
-                    'amostra' => 'amostra.php',
-                    'fotografia' => 'fotografia.php',
-                    'inteligencia_mercado' => 'inteligenciaMercado.php',
-                    'designers' => 'designers.php'
+                    'comunicacao' => '/../includes/comunicacao/comunicacao.php',
+                    'detec' => '/../includes/detec/detec.php',
+                    'amostra' => '/../includes/amostra/amostra.php',
+                    'fotografia' => '/../includes/fotografia/fotografia.php',
+                    'inteligencia_mercado' => '/../includes/inteligencia/inteligenciaMercado.php',
+                    'designers' => '/../includes/designers/designers.php'
                 };
                 ?>
 
@@ -104,4 +104,4 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </table>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>

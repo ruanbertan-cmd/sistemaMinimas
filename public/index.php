@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/menu.php';
+require_once __DIR__ . '/includes/layout/header.php';
+require_once __DIR__ . '/includes/layout/menu.php';
 require_once __DIR__ . '/../config/conexao.php';
-require_once __DIR__ . '/includes/etapas.php';
+require_once __DIR__ . '/includes/helpers/etapas.php';
 
 // Buscar dados do processo + item
 $stmt = $pdo->query("
@@ -79,4 +79,4 @@ foreach ($dados as $linha) {
     </div>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/includes/layout/footer.php'; ?>

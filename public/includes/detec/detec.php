@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/menu.php';
-require_once __DIR__ . '/../config/conexao.php';
-require_once __DIR__ . '/includes/etapas.php';
-require_once __DIR__ . '/voltarEtapas.php';
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/menu.php';
+require_once __DIR__ . '/../helpers/etapas.php';
+require_once __DIR__ . '/../../../config/conexao.php';
+require_once __DIR__ . '/../helpers/voltarEtapas.php';
 
 if (!isset($_GET['id'])) {
     die("Processo não informado.");
@@ -174,4 +174,4 @@ document.getElementById('metodoDetec').addEventListener('change', function() {
     </div>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>
