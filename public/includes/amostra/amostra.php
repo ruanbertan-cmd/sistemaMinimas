@@ -11,7 +11,23 @@ if (!isset($_GET['id'])) {
 
 $processoId = (int) $_GET['id'];
 
-// Se o usuário clicou em "Voltar Etapa"
+
+function etapaAnterior(PDO $pdo, int $processoId) {
+    $ordemEtapas = ['comunicacao','detec','amostra','inteligencia_mercado','designers','fotografia'];
+
+    $stmt = $pdo->prepare("SELECT etapa_atual FROM itens_processos WHERE id = ?");
+    $stmt->execute([$processoId]);
+    $etapaAtual = $stmt->fetchColumn();
+
+    $pos = array_search($etapaAtual, $ordemEtapas);
+    if ($pos === false || $pos === 0) {
+        return null;
+    }
+    return $ordemEtapas[$pos - 1];
+}
+
+$etapaAnterior = etapaAnterior($pdo, $processoId);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'voltar') {
     try {
         $novaEtapa = voltarEtapa($pdo, $processoId, 'usuarioSistema', 'Voltando etapa por revisão');
@@ -20,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'voltar'
         echo "<div class='alert error'>Erro: " . $e->getMessage() . "</div>";
     }
 }
+
+
 
 // Buscar dados do processo + item
 $stmt = $pdo->prepare("
@@ -128,10 +146,16 @@ if (!$processo) {
             </div>
             <button type="submit">Liberar Processo</button>
         </form>
-        <form method="POST">
+        <form method="POST" onsubmit="return confirmarVoltar()">
             <input type="hidden" name="acao" value="voltar">
             <button type="submit">Voltar Etapa</button>
         </form>
+
+        <script>
+        function confirmarVoltar() {
+            return confirm("O item vai retornar para a fase <?= $etapaAnterior ?>, tem certeza?");
+        }
+        </script>
     </div>
 </div>
 
