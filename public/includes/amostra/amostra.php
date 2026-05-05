@@ -11,7 +11,7 @@ if (!isset($_GET['id'])) {
 
 $processoId = (int) $_GET['id'];
 
-
+// Se o usuário clicou em "Voltar Etapa"
 function etapaAnterior(PDO $pdo, int $processoId) {
     $ordemEtapas = ['comunicacao','detec','amostra','inteligencia_mercado','designers','fotografia'];
 
@@ -36,8 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'voltar'
         echo "<div class='alert error'>Erro: " . $e->getMessage() . "</div>";
     }
 }
-
-
 
 // Buscar dados do processo + item
 $stmt = $pdo->prepare("
@@ -129,7 +127,8 @@ if (!$processo) {
                 <label for="metodoAmostra">Procedimento Amostra</label>
                 <select name="metodo_amostra" id="metodoAmostra" required>
                     <option value=""></option>
-                    <option value="separadoPecas">Ok, Itens separados</option>
+                    <option value="pecasSeparadas">Itens separados do estoque</option>
+                    <option value="pecasRecebidas">Itens recebidos pelo Depto. Detec</option>
                 </select>
             </div>
 

@@ -125,7 +125,7 @@ if (!$processo) {
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <?= selectEtapas() ?>
+                <?= selectEtapas(null, $processo['etapa_atual']) ?>
             </div>
             <button type="submit">Liberar Processo</button>
         </form>

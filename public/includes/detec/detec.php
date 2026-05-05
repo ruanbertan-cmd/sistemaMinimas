@@ -162,12 +162,14 @@ if (!$processo) {
                  <label for="observacao">Observação:</label>
                  <input type="text" name="observacao_detec" placeholder="Observação">
             </div>
-            </div>
-            <div>
-                <input type="hidden" name="proxima_etapa" id="proxima_etapa">
+
+            <h3>Próxima Etapa</h3>
+
+            <div class="form-group">
+                <?= selectEtapas(null, $processo['etapa_atual']) ?>
             </div>
             <button type="submit">Liberar Processo</button>
-        </form>
+        </form><br>
         <form method="POST" onsubmit="return confirmarVoltar()">
             <input type="hidden" name="acao" value="voltar">
             <button type="submit">Voltar Etapa</button>
