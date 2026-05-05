@@ -3,7 +3,7 @@
         <li><a href="/index.php">Dashboard</a></li>
         <li><a href="/includes/cadastro/cadastro.php">Cadastro</a></li>
         <li><a href="/includes/logs/fases.php">Fases</a></li>
-        <li><a href="/includes/relatorios/relatorios.php">Relatórios</a></li>
-        <li><a href="/includes/admin/admin.php">Administração</a></li>
+        <li><a href="/includes/relatorios/fotografo.php">Fotografo</a></li>
+        <li><a href="/includes/admin/manipulacao.php">Manipulação</a></li>
     </ul>
 </nav>
