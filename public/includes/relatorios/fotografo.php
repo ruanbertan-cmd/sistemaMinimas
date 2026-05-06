@@ -33,8 +33,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Descrição</th>
             <th>Dimensão</th>
             <th>Marca</th>
-            <th>Unidade</th>
-            <th>Faces</th>
+            <th>Quantidades</th>
+            <th>Total</th>
             <th>Ações</th>
         </tr>
         <?php foreach ($itens as $item): ?>
@@ -43,9 +43,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['descricao']) ?></td>
             <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
-            <td><?= htmlspecialchars($item['unidade_fabricacao']) ?></td>
-            <td>Foto: <?= htmlspecialchars($item['qtd_pecas_foto']) ?></td>
-            <td>Vídeo: <?= htmlspecialchars($item['qtd_pecas_video']) ?></td>
+            <td>Foto: <?= htmlspecialchars($item['qtd_pecas_foto']) ?>  Vídeo: <?= htmlspecialchars($item['qtd_pecas_video']) ?></td>
+            <td>Total: <?= htmlspecialchars($item['qtd_pecas_foto'] + $item['qtd_pecas_video']) ?></td>
 
             <td>
                 <!-- Botão para gerar pacote -->
