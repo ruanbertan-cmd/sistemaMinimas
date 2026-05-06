@@ -62,18 +62,18 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     ?,?,?,?,?,?,?,?,?,?,
                     ?,?,?,?,?,?,?,?,?,?,
                     ?,?,?,?,?,?,?,?,?,?,
-                    ?,?
+                    ?,'usuario Cadastrante'
                 )
             ");
 
             $stmtProcesso = $pdo->prepare("
                 INSERT INTO itens_processos (item_id, etapa_atual, status_geral)
-                VALUES (?, 'Definição Inicial Comunicação', 'Em Andamento')
+                VALUES (?, 'comunicacao', 'em_andamento')
             ");
 
             $stmtLog = $pdo->prepare("
-                INSERT INTO itens_movimentacoes (processo_id, area, acao, usuario)
-                VALUES (?, 'Inteligência de Mercado', 'Processo Iniciado', 'usuario')
+                INSERT INTO itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
+                VALUES (?, 'Criação de Item', 'Inteligência de Mercado', 'Processo Iniciado', 'usuario', 'Inicio do Processo')
             "); // Aqui idealmente deveria ser o usuário logado, mas como não temos sistema de login, deixei um placeholder
 
             $contagemMarcas = [
@@ -84,7 +84,11 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $totalImportado = 0;
 
-            while (($dados = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            while (($dados = fgetcsv($handle, 1000, ";")) !== FALSE) {
+                    // Corrige vírgulas decimais para ponto
+                    $dados[16] = str_replace(',', '.', $dados[16]); // m2_caixa
+                    $dados[17] = str_replace(',', '.', $dados[17]); // peso_caixa
+                    // ... faça isso para todas as colunas numéricas que vêm com vírgula
 
                 $stmtItem->execute($dados);
 
