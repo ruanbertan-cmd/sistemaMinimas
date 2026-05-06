@@ -59,6 +59,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         'finalizado' => 'aprovado',
                         'em_andamento' => 'andamento',
                         'reprovado' => 'reprovado',
+                        'cancelado' => 'cancelado',
                         default => 'pendente'
                     };
                 ?>
@@ -80,11 +81,23 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'designers' => '/../includes/designers/designers.php'
                 };
                 ?>
+            
+                <!-- Botão Liberar -->
+                <?php if (!empty($item['processo_id']) && $item['status_geral'] !== 'cancelado'): ?>
+                    <a class="btn-detalhes"
+                    href="<?= $paginaEtapa ?>?id=<?= urlencode($item['processo_id']) ?>">
+                    Liberar
+                    </a>
+                <?php endif; ?>
 
-                <a class="btn-detalhes"
-                href="<?= $paginaEtapa ?>?id=<?= urlencode($item['processo_id']) ?>">
-                Liberar
-                </a>
+                <!-- Botão Deletar -->
+                 <?php if (!empty($item['processo_id']) && $item['status_geral'] !== 'cancelado'): ?>
+                    <a class="btn-deletar"
+                    href="deletar_processo.php?id=<?= urlencode($item['processo_id']) ?>"
+                    onclick="return confirm('Tem certeza que deseja deletar este item?');">
+                    Deletar
+                    </a>
+                <?php endif; ?>
             </td>
 
             <td>
