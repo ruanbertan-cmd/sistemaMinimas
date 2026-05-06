@@ -77,6 +77,39 @@ button:hover {
     background: #444;
 }
 
+/* Botão Liberar (verde) */
+.btn-liberar {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #22c55e; /* verde */
+    color: #fff;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.btn-liberar:hover {
+    background-color: #16a34a; /* verde mais escuro */
+}
+
+/* Botão Deletar (vermelho) */
+.btn-deletar {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #ef4444; /* vermelho */
+    color: #fff;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.btn-deletar:hover {
+    background-color: #dc2626; /* vermelho mais escuro */
+}
+
+
 /* =========================
    DASHBOARD CARDS
 ========================= */

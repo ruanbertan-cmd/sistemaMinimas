@@ -84,7 +84,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
                 <!-- Botão Liberar -->
                 <?php if (!empty($item['processo_id']) && $item['status_geral'] !== 'cancelado'): ?>
-                    <a class="btn-detalhes"
+                    <a class="btn-liberar"
                     href="<?= $paginaEtapa ?>?id=<?= urlencode($item['processo_id']) ?>">
                     Liberar
                     </a>
