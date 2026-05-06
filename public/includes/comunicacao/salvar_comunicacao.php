@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        header("Location: fases.php");
+        header("Location: ../logs/fases.php");
         exit;
 
     } catch (Exception $e) {
