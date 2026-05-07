@@ -102,7 +102,7 @@ if (!$processo) {
                     <input type="checkbox" name="precisa_manipulacao" value="1">
                         Precisa de Manipulação
                 </label>
-                    <select name="detalhe_manipulacao" id="detalheManipulacao" if('precisa_manipulacao' == 1) required>
+                    <select name="detalhe_manipulacao" id="detalheManipulacao">
                         <option value="">Selecione</option>
                         <option value="Faces Distintas">Todas Faces Distintas</option>
                         <option value="Faces Aleatórias">Faces podem ser aleatórias</option>
