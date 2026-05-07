@@ -1,8 +1,8 @@
 <?php
 
-date_default_timezone_set('America/Sao_Paulo');
+require_once __DIR__ . '/../../../config/conexao.php';
 
-require_once __DIR__ . '/../config/conexao.php';
+date_default_timezone_set('America/Sao_Paulo');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $processoId = (int) $_POST['processo_id'];
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        header("Location: fases.php");
+        header("Location: ../logs/fases.php");
         exit;
     } catch (Exception $e) {
 
