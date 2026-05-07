@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/../../../config/conexao.php';
 
+date_default_timezone_set('America/Sao_Paulo');
+
 if (!isset($_GET['id'])) {
     die("Processo não informado.");
 }

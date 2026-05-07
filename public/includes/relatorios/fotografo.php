@@ -5,6 +5,8 @@ require_once __DIR__ . '/../helpers/etapas.php';
 require_once __DIR__ . '/../../../config/conexao.php';
 require_once __DIR__ . '/../helpers/voltarEtapas.php';
 
+date_default_timezone_set('America/Sao_Paulo');
+
 $stmt = $pdo->query("
 SELECT 
     p.id AS processo_id,

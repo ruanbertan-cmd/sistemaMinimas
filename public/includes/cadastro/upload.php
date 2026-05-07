@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/../../../config/conexao.php';
 
+date_default_timezone_set('America/Sao_Paulo');
+
 if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
     $arquivoTmp = $_FILES['arquivo']['tmp_name'];

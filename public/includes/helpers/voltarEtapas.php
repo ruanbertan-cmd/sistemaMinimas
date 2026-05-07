@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('America/Sao_Paulo');
+
 function voltarEtapa(PDO $pdo, int $processoId, string $usuario, string $observacao = '') {
     // Definir ordem das etapas
     $ordemEtapas = [
