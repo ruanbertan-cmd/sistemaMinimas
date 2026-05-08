@@ -46,7 +46,16 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
             <td>Foto: <?= htmlspecialchars($item['qtd_pecas_foto']) ?>  Vídeo: <?= htmlspecialchars($item['qtd_pecas_video']) ?></td>
-            <td>Total: <?= htmlspecialchars($item['qtd_pecas_foto'] + $item['qtd_pecas_video']) ?></td>
+            <td>Total: <?php
+            if ($item['qtd_pecas_foto'] > $item['qtd_pecas_video']) {
+                echo $item['qtd_pecas_foto'];
+            } else if ($item['qtd_pecas_video'] > $item['qtd_pecas_foto']) {
+                echo $item['qtd_pecas_video'];
+            } else {
+                echo $item['qtd_pecas_foto']; // ou $item['qtd_pecas_video'], ambos são iguais
+            }
+            
+            ?></td>
 
             <td>
                 <!-- Botão para gerar pacote -->
