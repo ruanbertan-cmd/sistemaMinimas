@@ -90,6 +90,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     // Corrige vírgulas decimais para ponto
                     $dados[16] = str_replace(',', '.', $dados[16]); // m2_caixa
                     $dados[17] = str_replace(',', '.', $dados[17]); // peso_caixa
+                    $dados[19] = str_replace(',', '.', $dados[19]); // espessura
                     // ... faça isso para todas as colunas numéricas que vêm com vírgula
 
                 $stmtItem->execute($dados);
