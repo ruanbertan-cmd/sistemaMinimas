@@ -23,6 +23,7 @@ body {
 .container {
     padding: 40px;
     flex: 1;
+    margin-top: 40px; /* espaço para compensar a altura da navbar */
 }
 
 /* =========================
@@ -32,7 +33,14 @@ nav {
     background: #1f1f1f;
     padding: 15px 40px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+    position: fixed;   /* fixa no topo */
+    top: 0;            /* encosta no topo */
+    left: 0;
+    width: 100%;       /* ocupa toda a largura */
+    z-index: 1000;     /* fica acima dos outros elementos */
 }
+
 
 nav .menu {
     list-style: none;
