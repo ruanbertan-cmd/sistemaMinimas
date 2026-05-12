@@ -77,10 +77,6 @@ foreach ($dados as $linha) {
             </div>
         </div>
     </div>
-    <form action="relatorios/relatorio_itens.php" method="POST" target="_blank">
-       <button type="submit">Gerar Relatório PDF</button>
-    </form>
-
 </div>
 
 <?php require_once __DIR__ . '/includes/layout/footer.php'; ?>
