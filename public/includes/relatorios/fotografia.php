@@ -45,41 +45,54 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- Comunicação -->
             <td>
                 <?php if ($pacote['status'] === 'aberto'): ?>
-                    <form action="aprovar_comunicacao.php" method="POST" style="display:inline;" 
-                          onsubmit="return confirm('Tem certeza que deseja aprovar este pacote?');">
-                        <input type="hidden" name="pacote_id" value="<?= $pacote['pacote_id'] ?>">
+                    <form action="aprovar_comunicacao.php" method="POST" 
+                        onsubmit="return confirm('Aprovar este pacote?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
                         <button type="submit" class="btn-liberar">Aprovar</button>
                     </form>
                 <?php else: ?>
-                    Aprovado em <?= date('d/m/Y H:i', strtotime($pacote['data_fechamento'])) ?>
+                    <span class="status aprovado">
+                        Aprovado em <?= $pacote['data_fechamento'] 
+                            ? date('d/m/Y H:i', strtotime($pacote['data_fechamento'])) 
+                            : '-' ?>
+                    </span>
                 <?php endif; ?>
             </td>
 
             <!-- Agendamento Fotógrafo -->
             <td>
-                <?php if (!$pacote['data_agendamento']): ?>
-                    <form action="agendar_fotografia.php" method="POST" style="display:inline;" 
-                        onsubmit="return confirmarAgendamento(this);">
-                        <input type="hidden" name="pacote_id" value="<?= $pacote['pacote_id'] ?>">
+                <?php if ($pacote['status'] === 'aberto'): ?>
+                    <span class="status pendente">Aguardando Comunicação</span>
+                <?php elseif ($pacote['data_agendamento']): ?>
+                    <span class="status andamento">
+                        <?= date('d/m/Y H:i', strtotime($pacote['data_agendamento'])) ?>
+                        - <?= htmlspecialchars($pacote['responsavel_fotografia']) ?>
+                    </span>
+                <?php else: ?>
+                    <form action="agendar_fotografia.php" method="POST" 
+                        onsubmit="return confirm('Confirmar agendamento do fotógrafo?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
                         <input type="datetime-local" name="data_hora" required>
                         <input type="text" name="responsavel" placeholder="Responsável" required>
                         <button type="submit" class="btn-detalhes">Agendar</button>
                     </form>
-                <?php else: ?>
-                    Agendado em <?= date('d/m/Y H:i', strtotime($pacote['data_agendamento'])) ?> - <?= $pacote['responsavel_fotografia'] ?>
                 <?php endif; ?>
             </td>
 
             <!-- Envio de Peças -->
             <td>
-                <?php if (!$pacote['data_envio']): ?>
-                    <form action="enviar_pecas.php" method="POST" style="display:inline;" 
-                          onsubmit="return confirm('Confirmar envio das peças?');">
-                        <input type="hidden" name="pacote_id" value="<?= $pacote['pacote_id'] ?>">
+                <?php if (!$pacote['data_agendamento']): ?>
+                    <span class="status pendente">Aguardando Fotógrafo</span>
+                <?php elseif (!$pacote['data_envio']): ?>
+                    <form action="enviar_pecas.php" method="POST" 
+                        onsubmit="return confirm('Confirmar envio das peças?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
                         <button type="submit" class="btn-detalhes">Enviar</button>
                     </form>
                 <?php else: ?>
-                    Enviado em <?= date('d/m/Y H:i', strtotime($pacote['data_envio'])) ?>
+                    <span class="status enviado">
+                        Enviado em <?= date('d/m/Y H:i', strtotime($pacote['data_envio'])) ?>
+                    </span>
                 <?php endif; ?>
             </td>
 

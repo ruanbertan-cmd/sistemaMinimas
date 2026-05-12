@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../config/conexao.php';
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/menu.php';
 
 $pacoteId = (int) $_GET['id'];
 
@@ -28,50 +30,71 @@ $itens = $stmtItens->fetchAll(PDO::FETCH_ASSOC);
 <div class="container">
     <h1>Detalhes do Pacote #<?= $pacoteId ?></h1>
 
-    <table>
+    <table class="tabela-status">
         <tr>
             <th>Comunicação</th>
             <th>Agendamento Fotógrafo</th>
             <th>Envio de Peças</th>
         </tr>
         <tr>
+        <tr>
             <!-- Comunicação -->
             <td>
                 <?php if ($pacote['status'] === 'aberto'): ?>
                     <form action="aprovar_comunicacao.php" method="POST" 
-                          onsubmit="return confirm('Aprovar este pacote?');">
+                        onsubmit="return confirm('Aprovar este pacote?');">
                         <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
                         <button type="submit" class="btn-liberar">Aprovar</button>
                     </form>
                 <?php else: ?>
-                    Aprovado em <?= date('d/m/Y H:i', strtotime($pacote['data_fechamento'])) ?>
+                    <span class="status aprovado">
+                        Aprovado em <?= $pacote['data_fechamento'] 
+                            ? date('d/m/Y H:i', strtotime($pacote['data_fechamento'])) 
+                            : '-' ?>
+                    </span>
                 <?php endif; ?>
             </td>
 
             <!-- Agendamento Fotógrafo -->
             <td>
-                <?= $pacote['data_agendamento'] 
-                    ? date('d/m/Y H:i', strtotime($pacote['data_agendamento'])) . " - " . $pacote['responsavel_fotografia'] 
-                    : 'Não agendado' ?>
+                <?php if ($pacote['status'] === 'aberto'): ?>
+                    <span class="status pendente">Aguardando Comunicação</span>
+                <?php elseif ($pacote['data_agendamento']): ?>
+                    <span class="status andamento">
+                        <?= date('d/m/Y H:i', strtotime($pacote['data_agendamento'])) ?>
+                        - <?= htmlspecialchars($pacote['responsavel_fotografia']) ?>
+                    </span>
+                <?php else: ?>
+                    <form action="agendar_fotografia.php" method="POST" 
+                        onsubmit="return confirm('Confirmar agendamento do fotógrafo?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                        <input type="datetime-local" name="data_hora" required>
+                        <input type="text" name="responsavel" placeholder="Responsável" required>
+                        <button type="submit" class="btn-detalhes">Agendar</button>
+                    </form>
+                <?php endif; ?>
             </td>
 
             <!-- Envio de Peças -->
             <td>
-                <?php if (!$pacote['data_envio']): ?>
+                <?php if (!$pacote['data_agendamento']): ?>
+                    <span class="status pendente">Aguardando Fotógrafo</span>
+                <?php elseif (!$pacote['data_envio']): ?>
                     <form action="enviar_pecas.php" method="POST" 
-                          onsubmit="return confirm('Confirmar envio das peças?');">
+                        onsubmit="return confirm('Confirmar envio das peças?');">
                         <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
                         <button type="submit" class="btn-detalhes">Enviar</button>
                     </form>
                 <?php else: ?>
-                    Enviado em <?= date('d/m/Y H:i', strtotime($pacote['data_envio'])) ?>
+                    <span class="status enviado">
+                        Enviado em <?= date('d/m/Y H:i', strtotime($pacote['data_envio'])) ?>
+                    </span>
                 <?php endif; ?>
             </td>
         </tr>
-    </table>
 
     <h2>Itens do Pacote</h2>
-    <table>
+    <table class="tabela-itens">
         <tr>
             <th>Código</th>
             <th>Descrição</th>
