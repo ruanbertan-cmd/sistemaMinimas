@@ -57,6 +57,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $processoId
         ]);
 
+
+        // Se a próxima etapa for fotografia, vincula o item a um pacote
+        if ($proximaEtapaInteligenciaMercado === 'fotografia') {
+            // Verifica se já existe pacote aberto
+            $stmtPacote = $pdo->query("SELECT id FROM pacotes_envio WHERE status='aberto' LIMIT 1");
+            $pacoteId = $stmtPacote->fetchColumn();
+
+            if (!$pacoteId) {
+                $stmtInsertPacote = $pdo->prepare("INSERT INTO pacotes_envio (status, aprovado_por) VALUES ('aberto', ?)");
+                $stmtInsertPacote->execute(['InteligenciaMercado']);
+                $pacoteId = $pdo->lastInsertId();
+            }
+
+            // Vincula item ao pacote
+            $stmtItem = $pdo->prepare("INSERT INTO pacote_itens (pacote_id, processo_id) VALUES (?, ?)");
+            $stmtItem->execute([$pacoteId, $processoId]);
+        }
+
+
         // Salvando log da alteracao de fase
 
         $stmtLog = $pdo->prepare("
@@ -76,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        header("Location: ../../includes/relatorios/fotografo.php");
+        header("Location: ../../includes/relatorios/fotografia.php");
         exit;
     } catch (Exception $e) {
 
