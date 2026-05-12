@@ -205,6 +205,11 @@ tr:hover {
     color: white;
 }
 
+.status.pendente, .status.enviado {
+    background-color: #22c55e;
+    color: white;
+}
+
 .pendente {
     background-color: #facc15;
     color: #333;
