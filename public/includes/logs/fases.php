@@ -97,7 +97,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
 
                 <?php elseif (!empty($item['processo_id']) 
-                            && $item['status_geral'] === 'enviado'): ?>
+                            && !empty($item['data_envio'])): ?>
 
                     <span class="status-ok">
                         Enviado em <?= $item['data_envio'] 
