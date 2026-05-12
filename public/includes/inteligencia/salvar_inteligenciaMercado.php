@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        header("Location: ../../includes/relatorios/fotografia.php");
+        header("Location: ../logs/fases.php");
         exit;
     } catch (Exception $e) {
 
