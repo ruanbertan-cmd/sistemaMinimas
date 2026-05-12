@@ -16,10 +16,10 @@ try {
     ");
     $stmt->execute([$pacoteId]);
 
-    // Atualiza todos os itens vinculados para status 'enviado'
+    // Atualiza todos os itens vinculados para status 'enviado' e data que o processo foi finalizado
     $stmtItens = $pdo->prepare("
         UPDATE itens_processos
-        SET status_geral = 'enviado'
+        SET status_geral = 'enviado' AND finalizado = NOW()
         WHERE id IN (SELECT processo_id FROM pacote_itens WHERE pacote_id = ?)
     ");
     $stmtItens->execute([$pacoteId]);
