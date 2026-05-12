@@ -57,6 +57,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     unidade_fabricacao,
                     monocalibre,
                     CicloLancamento,
+                    data_criacao,
                     responsavel_carga
                 )
                 VALUES (
@@ -64,7 +65,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     ?,?,?,?,?,?,?,?,?,?,
                     ?,?,?,?,?,?,?,?,?,?,
                     ?,?,?,?,?,?,?,?,?,?,
-                    ?,'usuario Cadastrante'
+                    ?,NOW(),'usuario Cadastrante'
                 )
             ");
 
@@ -74,8 +75,8 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
             ");
 
             $stmtLog = $pdo->prepare("
-                INSERT INTO itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
-                VALUES (?, 'Criação de Item', 'Inteligência de Mercado', 'Processo Iniciado', 'usuario', 'Inicio do Processo')
+                INSERT INTO itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
+                VALUES (?, 'Criação de Item', 'Inteligência de Mercado', 'Processo Iniciado', 'usuario', 'Inicio do Processo', NOW())
             "); // Aqui idealmente deveria ser o usuário logado, mas como não temos sistema de login, deixei um placeholder
 
             $contagemMarcas = [

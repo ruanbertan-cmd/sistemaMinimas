@@ -80,8 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtLog = $pdo->prepare("
             INSERT INTO itens_movimentacoes
-            (processo_id, area_origem, area_destino, acao, usuario, observacao)
-            VALUES (?,?,?,?,?,?)
+            (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
+            VALUES (?,?,?,?,?,?,?)
         ");
 
         $stmtLog->execute([
@@ -90,7 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proximaEtapaInteligenciaMercado,
             'liberacao_etapa',
             'usuarioSistema',
-            $observacaoInteligenciaMercado
+            $observacaoInteligenciaMercado,
+            date('Y-m-d H:i:s')
         ]);
 
         $pdo->commit();
