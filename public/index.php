@@ -16,7 +16,7 @@ $stmt = $pdo->query("
 
 $stmtFinalizados = $pdo->query("
     SELECT COUNT(*) FROM itens_processos
-    WHERE status_geral = 'finalizado'
+    WHERE status_geral = 'finalizado' OR status_geral = 'enviado'
 ");
 
 $totalFinalizados = $stmtFinalizados->fetchColumn();
