@@ -2,12 +2,12 @@
 
 function listarEtapas() {
     return [
+        'comunicacao' => 'Comunicação',
         'detec' => 'Detec',
         'amostra' => 'Amostra',
         'inteligencia_mercado' => 'Inteligência de Mercado',
-        'fotografia' => 'Fotografia',
         'manipulacao' => 'Manipulação',
-        'comunicacao' => 'Comunicação'
+        'fotografia' => 'Fotografia'
     ];
 }
 
