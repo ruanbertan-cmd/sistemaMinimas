@@ -17,14 +17,29 @@ $pacote = $stmtPacote->fetch(PDO::FETCH_ASSOC);
 
 // Buscar itens vinculados
 $stmtItens = $pdo->prepare("
-    SELECT i.codigo_item, i.descricao, i.tamanho_nominal, i.marca
+    SELECT i.id AS item_id, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca,
+           c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.qtd_pecas_video
     FROM pacote_itens pi
     INNER JOIN itens_processos p ON p.id = pi.processo_id
     INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
+    LEFT JOIN processo_comunicacao c ON c.processo_id = p.id
     WHERE pi.pacote_id = ?
 ");
 $stmtItens->execute([$pacoteId]);
 $itens = $stmtItens->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Buscar info destacada pela comunicacao
+$stmtInfoComunicacao = $pdo->prepare("
+    SELECT c.metodo_imagem, c.precisa_foto, c.qtd_pecas_foto, 
+       c.precisa_manipulacao, c.detalhe_manipulacao, c.qtd_pecas_manipulacao,
+       c.precisa_video, c.qtd_pecas_video, c.observacao
+FROM processo_comunicacao c
+INNER JOIN pacote_itens pi ON pi.processo_id = c.processo_id
+WHERE pi.pacote_id = ?
+");
+$stmtInfoComunicacao->execute([$pacoteId]);
+$infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
@@ -100,6 +115,10 @@ $itens = $stmtItens->fetchAll(PDO::FETCH_ASSOC);
             <th>Descrição</th>
             <th>Dimensão</th>
             <th>Marca</th>
+            <th>Qtd Foto</th>
+            <th>Qtd Manipulação</th>
+            <th>Qtd Vídeo</th>
+            <th>Total Peças Foto</th>
         </tr>
         <?php foreach ($itens as $item): ?>
         <tr>
@@ -107,7 +126,16 @@ $itens = $stmtItens->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['descricao']) ?></td>
             <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
+            <td><?= htmlspecialchars($item['qtd_pecas_foto'] ?? '-') ?></td>
+            <td><?= htmlspecialchars($item['qtd_pecas_manipulacao'] ?? '-') ?></td>
+            <td><?= htmlspecialchars($item['qtd_pecas_video'] ?? '-') ?></td>
+            <td><?php if ($item["qtd_pecas_foto"] > $item['qtd_pecas_video']): ?>
+                <?= htmlspecialchars(($item['qtd_pecas_foto'] ?? 0)) ?>
+                <?php elseif ($item['qtd_pecas_video'] > $item['qtd_pecas_foto']): ?>
+                <?= htmlspecialchars(($item['qtd_pecas_video'] ?? 0)) ?>
+            <?php endif; ?></td>
         </tr>
         <?php endforeach; ?>
     </table>
+
 </div>
