@@ -35,12 +35,6 @@ foreach ($dados as $linha) {
     <h2>Resumo das Pendências por Etapas</h2><br>
 
     <div class="cards">
-        <div class="card">
-                <h3>Inteligência de Mercado</h3>
-            <div class="numero">
-                <?= $contagem['inteligencia_mercado'] ?? 0 ?>
-            </div>
-        </div>
 
         <div class="card">
                 <h3>Comunicação</h3>
@@ -60,6 +54,13 @@ foreach ($dados as $linha) {
             <h3>Amostra</h3>
             <div class="numero">
                 <?= $contagem['amostra'] ?? 0 ?>
+            </div>
+        </div>
+
+        <div class="card">
+                <h3>Inteligência de Mercado</h3>
+            <div class="numero">
+                <?= $contagem['inteligencia_mercado'] ?? 0 ?>
             </div>
         </div>
 
