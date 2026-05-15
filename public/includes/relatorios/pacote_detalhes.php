@@ -18,7 +18,7 @@ $pacote = $stmtPacote->fetch(PDO::FETCH_ASSOC);
 // Buscar itens vinculados
 $stmtItens = $pdo->prepare("
     SELECT i.id AS item_id, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca,
-           c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.qtd_pecas_video
+           c.metodo_imagem, c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.qtd_pecas_video
     FROM pacote_itens pi
     INNER JOIN itens_processos p ON p.id = pi.processo_id
     INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
@@ -115,10 +115,10 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             <th>Descrição</th>
             <th>Dimensão</th>
             <th>Marca</th>
-            <th>Qtd Foto</th>
+            <th>Qtd Fotografo</th>
             <th>Qtd Manipulação</th>
-            <th>Qtd Vídeo</th>
-            <th>Total Peças Foto</th>
+            <th>Upload Fotografo</th>
+            <th>Upload Manipulação</th>
         </tr>
         <?php foreach ($itens as $item): ?>
         <tr>
@@ -126,14 +126,31 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['descricao']) ?></td>
             <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
-            <td><?= htmlspecialchars($item['qtd_pecas_foto'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($item['qtd_pecas_manipulacao'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($item['qtd_pecas_video'] ?? '-') ?></td>
-            <td><?php if ($item["qtd_pecas_foto"] > $item['qtd_pecas_video']): ?>
+            <td><?php if ($item['qtd_pecas_foto'] > $item['qtd_pecas_video']): ?>
                 <?= htmlspecialchars(($item['qtd_pecas_foto'] ?? 0)) ?>
                 <?php elseif ($item['qtd_pecas_video'] > $item['qtd_pecas_foto']): ?>
                 <?= htmlspecialchars(($item['qtd_pecas_video'] ?? 0)) ?>
+            <?php else: ?>
+                <?= htmlspecialchars(($item['qtd_pecas_foto'] ?? 0)) ?>
             <?php endif; ?></td>
+
+            <td><?= htmlspecialchars($item['qtd_pecas_manipulacao'] ?? '-') ?></td>
+
+            <td>
+                <?php if (!empty($item["qtd_pecas_foto"])): ?>
+                    <a href="upload_fotografo.php?item_id=<?= htmlspecialchars($item['item_id']) ?>" class="btn-detalhes">Upload</a>
+                <?php else: ?>
+                    -
+                <?php endif; ?>
+            </td>
+
+            <td>
+                <?php if (!empty($item["qtd_pecas_manipulacao"])): ?>
+                    <a href="upload_manipulacao.php?item_id=<?= htmlspecialchars($item['item_id']) ?>" class="btn-detalhes">Upload</a>
+                <?php else: ?>
+                    -
+                <?php endif; ?>
+            </td>
         </tr>
         <?php endforeach; ?>
     </table>
