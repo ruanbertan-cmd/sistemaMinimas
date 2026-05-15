@@ -18,7 +18,7 @@ $pacote = $stmtPacote->fetch(PDO::FETCH_ASSOC);
 // Buscar itens vinculados
 $stmtItens = $pdo->prepare("
     SELECT i.id AS item_id, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca,
-           c.metodo_imagem, c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.qtd_pecas_video
+           c.metodo_imagem, c.precisa_foto, c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.precisa_video, c.qtd_pecas_video
     FROM pacote_itens pi
     INNER JOIN itens_processos p ON p.id = pi.processo_id
     INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
@@ -126,13 +126,23 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['descricao']) ?></td>
             <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
-            <td><?php if ($item['qtd_pecas_foto'] > $item['qtd_pecas_video']): ?>
-                <?= htmlspecialchars(($item['qtd_pecas_foto'] ?? 0)) ?>
-                <?php elseif ($item['qtd_pecas_video'] > $item['qtd_pecas_foto']): ?>
-                <?= htmlspecialchars(($item['qtd_pecas_video'] ?? 0)) ?>
-            <?php else: ?>
-                <?= htmlspecialchars(($item['qtd_pecas_foto'] ?? 0)) ?>
-            <?php endif; ?></td>
+
+            <!-- Lógica para exibir quantidade de fotos/vídeos com base nas informações do processo_comunicacao -->
+            <?php
+            $qtdFoto = $item['qtd_pecas_foto'] . " peças"?? 0;
+            $qtdVideo = $item['qtd_pecas_video'] . " peças" ?? 0;
+            $precisaFoto = $item['precisa_foto'] ? ' (Foto)' : '';
+            $precisaVideo = $item['precisa_video'] ? ' (Vídeo)' : '';
+
+            if ($qtdFoto > $qtdVideo) {
+                $saida = $qtdFoto . $precisaFoto . $precisaVideo;
+            } elseif ($qtdVideo > $qtdFoto) {
+                $saida = $qtdVideo . $precisaFoto . $precisaVideo;
+            } else {
+                $saida = $qtdFoto;
+            }
+            ?>
+            <td><?= htmlspecialchars($saida) ?></td>
 
             <td><?= htmlspecialchars($item['qtd_pecas_manipulacao'] ?? '-') ?></td>
 
