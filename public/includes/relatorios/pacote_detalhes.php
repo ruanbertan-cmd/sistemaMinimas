@@ -74,7 +74,7 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             <td>
                 <?php if ($pacote['status'] === 'aberto'): ?>
                     <span class="status pendente">Aguardando Comunicação</span>
-                <?php elseif ($pacote['data_agendamento']): ?>
+                <?php elseif (!empty($pacote['data_agendamento'])): ?>
                     <span class="status andamento">
                         <?= date('d/m/Y H:i', strtotime($pacote['data_agendamento'])) ?>
                         - <?= htmlspecialchars($pacote['responsavel_fotografia']) ?>
