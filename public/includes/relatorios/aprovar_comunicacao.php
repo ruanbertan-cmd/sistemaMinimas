@@ -21,7 +21,7 @@ try {
     // Atualiza todos os itens vinculados
     $stmtItens = $pdo->prepare("
         UPDATE itens_processos
-        SET status_geral = 'finalizado'
+        SET status_geral = 'preparando_envio'
         WHERE id IN (SELECT processo_id FROM pacote_itens WHERE pacote_id = ?)
     ");
     $stmtItens->execute([$pacoteId]);
