@@ -55,7 +55,7 @@ try {
         $processoId,
         $etapaAtual,
         'fotografo',
-        'liberacao_etapa',
+        'aprovar_envio_pecas',
         'usuarioSistema',
         'Aprovando envio das peças separadas na amostra',
         date('Y-m-d H:i:s')
