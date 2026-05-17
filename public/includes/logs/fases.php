@@ -79,7 +79,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'comunicacao' => '/../includes/comunicacao/comunicacao.php',
                     'detec' => '/../includes/detec/detec.php',
                     'amostra' => '/../includes/amostra/amostra.php',
-                    'fotografo' => '/../includes/fotografia/fotografia.php',
+                    'fotografo' => '/../includes/relatorios/fotografo.php',
                     'inteligencia_mercado' => '/../includes/inteligencia/inteligenciaMercado.php',
                     'designers' => '/../includes/designers/designers.php'
                 };
@@ -88,7 +88,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Botão Liberar -->
                 <?php if (!empty($item['processo_id']) 
                         && $item['status_geral'] !== 'cancelado' 
-                        && $item['etapa_atual'] !== 'fotografia' 
+                        && $item['etapa_atual'] !== 'fotografo' 
                         && $item['status_geral'] !== 'enviado'): ?>
 
                     <a class="btn-liberar"
