@@ -109,7 +109,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
                 <!-- Botão Deletar -->
-                 <?php if (!empty($item['processo_id']) && $item['status_geral'] !== 'cancelado' && $item['status_geral'] !== 'enviado' && $item['etapa_atual'] !== 'fotografia'): ?>
+                 <?php if (!empty($item['processo_id']) && $item['status_geral'] !== 'cancelado' && $item['status_geral'] !== 'enviado' && $item['etapa_atual'] !== 'fotografo'): ?>
                     <a class="btn-deletar"
                     href="deletar_processo.php?id=<?= urlencode($item['processo_id']) ?>"
                     onclick="return confirm('Tem certeza que deseja deletar este item?');">
