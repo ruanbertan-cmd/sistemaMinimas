@@ -23,6 +23,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ");
     $stmtUpdate->execute([$dataHora, $responsavel, $pacoteId]);
 
+
+
+    // Salvando fase Atual para Atualizacao Log posteriormente
+    $stmtEtapaAtual = $pdo->prepare("
+        SELECT etapa_atual
+        FROM itens_processos
+        WHERE id = ?
+    ");
+    $stmtEtapaAtual->execute([$processoId]);
+    $etapaAtual = $stmtEtapaAtual->fetchColumn();
+    // Atualizando etapda do item para a nova
+    $stmtupdate = $pdo->prepare("
+        UPDATE itens_processos
+        SET etapa_atual = ?,
+        status_geral = 'preparando_envio'
+        WHERE id = ?
+    ");
+    $stmtupdate->execute([
+        'preparando_envio',
+        $processoId
+    ]);
+    // Salvando log da alteracao de fase
+    $stmtLog = $pdo->prepare("
+        INSERT INTO itens_movimentacoes
+        (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
+        VALUES (?,?,?,?,?,?,?)
+    ");
+    $stmtLog->execute([
+        $processoId,
+        $etapaAtual,
+        'amostra',
+        'aprovar_envio_pecas',
+        'usuarioSistema',
+        'Aprovando envio das peças separadas na amostra',
+        date('Y-m-d H:i:s')
+    ]);
+
     header("Location: agendar_fotografia.php");
     exit;
 }
