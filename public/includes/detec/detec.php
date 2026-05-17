@@ -93,6 +93,7 @@ if (!$processo) {
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
             <h1>Seguir com a separação dos itens conforme indicado pelo Depto. Comunicação</h1>
+            <h2>IMPORTANTE: enviar peças separadas, identificadas para a Amostra (Separar Peças de Foto/Video das peças de Manipulação em pallet DIFERENTE)</h2><br>
 
             <div class="form-group">
                 <p>Quantidade de peças necessárias:</p>
