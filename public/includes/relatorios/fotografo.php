@@ -69,7 +69,7 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         - <?= htmlspecialchars($pacote['responsavel_fotografia']) ?>
                     </span>
                 <?php else: ?>
-                    <form action="agendar_fotografia.php" method="POST" 
+                    <form action="enviar_pecas.php" method="POST" 
                         onsubmit="return confirm('Confirmar agendamento do fotógrafo?');">
                         <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
                         <input type="datetime-local" name="data_hora" required>
