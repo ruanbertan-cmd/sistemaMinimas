@@ -44,18 +44,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtEtapaAtual->execute([$processoId]);
         $etapaAtual = $stmtEtapaAtual->fetchColumn();
 
-        // Atualizando etapda do item para a nova
-        $stmtupdate = $pdo->prepare("
-            UPDATE itens_processos
-            SET etapa_atual = ?,
-            status_geral = 'em_andamento'
-            WHERE id = ?
-        ");
-
-        $stmtupdate->execute([
-            $proximaEtapaInteligenciaMercado,
-            $processoId
-        ]);
+        // Atualizando etapa do item para a nova
+        if ($proximaEtapaInteligenciaMercado === 'fotografia') {
+            // Caso especial: Fotografia precisa passar por Comunicação (aprovação)
+            $stmtupdate = $pdo->prepare("
+                UPDATE itens_processos
+                SET etapa_atual = 'comunicacao',
+                    status_geral = 'preparando_envio'
+                WHERE id = ?
+            ");
+            $stmtupdate->execute([$processoId]);
+        } else {
+            // Demais etapas seguem fluxo normal
+            $stmtupdate = $pdo->prepare("
+                UPDATE itens_processos
+                SET etapa_atual = ?,
+                    status_geral = 'em_andamento'
+                WHERE id = ?
+            ");
+            $stmtupdate->execute([
+                $proximaEtapaInteligenciaMercado,
+                $processoId
+            ]);
+        }
 
 
         // Se a próxima etapa for fotografia, vincula o item a um pacote
@@ -78,6 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Salvando log da alteracao de fase
 
+        $destino = ($proximaEtapaInteligenciaMercado === 'fotografia') 
+            ? 'comunicacao' 
+            : $proximaEtapaInteligenciaMercado;
+
         $stmtLog = $pdo->prepare("
             INSERT INTO itens_movimentacoes
             (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
@@ -87,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtLog->execute([
             $processoId,
             $etapaAtual,
-            $proximaEtapaInteligenciaMercado,
+            $destino,
             'liberacao_etapa',
             'usuarioSistema',
             $observacaoInteligenciaMercado,
