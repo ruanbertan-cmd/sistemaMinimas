@@ -1,5 +1,26 @@
-## 📦 Sistema de Gestão de Pacotes
+# Processos para revisar no projeto:
+
+AS peças para manipulação, separadas pelo Detec, precisa ser separado no pallet
+Separadas pela propria amostra, ja é separado na hora da manipulação.
+
+1 - Tratar em telas diferentes? Pensar na visão Luiz da amostra. O que veio do Detec, como ele vai ficar melhor pra entender quantas peças precisa tirar do pallet e quantas precisa ficar para enviar ao Arlei...
+
+2 - Pendencias checklist Inteligencia Mercado, pensar em como tratar...
+
+3 - Quando fechar o pacote (Aprovação comunicação), não pode ficar como finalizado, precisa atualizar de acordo com a fase, exemplo: Aguardando agendamento de horario, Aguardando envio de peças...
+
+4 - Revisar nome das tabelas no banco de dados (incluir prefixo sistema_minimas_...)
+
+
+Ultimo passo do projeto
+- Upload das imagens e Video, conexão com Sistema de imagem
+
+
+
+
+## Sistema para Controle de Fluxo de Imagens
 Este projeto é um sistema interno para gestão de pacotes de envio, integrando diferentes etapas do fluxo de aprovação e controle de itens. Ele foi desenvolvido em PHP com MySQL, utilizando uma interface simples e tabelas para visualização dos dados.
+
 
 **⚙️ Como funciona**
 O sistema organiza o fluxo em fases sequenciais, garantindo rastreabilidade e controle:

@@ -42,7 +42,9 @@ $stmtInfoComunicacao->execute([$pacoteId]);
 $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="container">
+<a href="pacote.php" class="btn btn-secondary" style="margin-top:90px;"><- Voltar</a>
+
+<div class="container" style="margin-top:-10px;">
     <h1>Detalhes do Pacote #<?= $pacoteId ?></h1>
 
     <table class="tabela-status">
