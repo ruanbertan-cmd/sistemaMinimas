@@ -79,7 +79,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'comunicacao' => '/../includes/comunicacao/comunicacao.php',
                     'detec' => '/../includes/detec/detec.php',
                     'amostra' => '/../includes/amostra/amostra.php',
-                    'fotografo' => '/../includes/relatorios/fotografo.php',
+                    'fotografo' => '/../includes/relatorios/pacote.php',
                     'inteligencia_mercado' => '/../includes/inteligencia/inteligenciaMercado.php',
                     'designers' => '/../includes/designers/designers.php'
                 };
