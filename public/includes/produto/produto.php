@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../config/conexao.php';
 require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/menu.php';
 
 $sql = "
 SELECT 
@@ -11,13 +12,18 @@ SELECT
     i.tamanho_nominal,
     i.marca,
     i.numeros_face,
-    COUNT(im.id) AS total_arquivos
+    COUNT(im.id) AS total_arquivos,
+    CASE
+        WHEN SUM(im.status = 'pendente') > 0 THEN 'Pendente'
+        WHEN SUM(im.status = 'rejeitado') > 0 THEN 'Rejeitado'
+        ELSE 'Aprovado'
+    END AS status_item
 FROM cadastros_itens_minimas i
 INNER JOIN itens_processos p ON p.item_id = i.id
 INNER JOIN pacote_itens pi ON pi.processo_id = p.id
 INNER JOIN pacotes_envio pe ON pe.id = pi.pacote_id
 INNER JOIN item_imagens im ON im.item_id = i.id AND im.pacote_id = pe.id
-GROUP BY i.id, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca
+GROUP BY i.id, i.unidade_fabricacao, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca
 ORDER BY i.id DESC
 
 ";
@@ -31,11 +37,12 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2>Itens com Imagem para Aprovação</h2><br>
     <table class="tabela-itens">
         <tr>
+            <th>Uni Fabril</th>
             <th>Código</th>
             <th>Descrição</th>
-            <th>Dimensão</th>
             <th>Marca</th>
             <th>Qtd Faces</th>
+            <th>Situação</th>
             <th>Visualizar Imagens</th>
         </tr>
         <?php foreach ($itens as $item): ?>
@@ -45,6 +52,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['descricao']) . ' ' . htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
             <td><?= $item['numeros_face'] ?></td>
+            <td><?= $item['status_item'] ?></td>
             <td><a href="produto_detalhes.php?item_id=<?= $item['item_id'] ?>" class="btn btn-primary">Visualizar</a></td>
         </tr>
         <?php endforeach; ?>
