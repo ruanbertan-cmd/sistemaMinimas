@@ -4,5 +4,6 @@
         <li><a href="/includes/cadastro/cadastro.php">Cadastro</a></li>
         <li><a href="/includes/logs/fases.php">Fases</a></li>
         <li><a href="/includes/relatorios/pacote.php">Pacote</a></li>
+        <li><a href="/includes/produto/produto.php">Produto</a></li>
     </ul>
 </nav>
