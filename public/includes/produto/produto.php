@@ -1,0 +1,281 @@
+<?php
+require_once __DIR__ . '/../../../config/conexao.php';
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/menu.php';
+
+$pacoteId = (int) $_GET['id'];
+
+// Buscar informações do pacote
+$stmtPacote = $pdo->prepare("
+    SELECT id, status, data_criacao, data_fechamento, aprovado_por,
+           data_agendamento, responsavel_fotografia, data_envio
+    FROM pacotes_envio
+    WHERE id = ?
+");
+$stmtPacote->execute([$pacoteId]);
+$pacote = $stmtPacote->fetch(PDO::FETCH_ASSOC);
+
+// Buscar itens vinculados
+$stmtItens = $pdo->prepare("
+    SELECT i.id AS item_id, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca,
+           c.metodo_imagem, c.precisa_foto, c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.precisa_video, c.qtd_pecas_video
+    FROM pacote_itens pi
+    INNER JOIN itens_processos p ON p.id = pi.processo_id
+    INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
+    LEFT JOIN processo_comunicacao c ON c.processo_id = p.id
+    WHERE pi.pacote_id = ?
+");
+$stmtItens->execute([$pacoteId]);
+$itens = $stmtItens->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Buscar info destacada pela comunicacao
+$stmtInfoComunicacao = $pdo->prepare("
+    SELECT c.metodo_imagem, c.precisa_foto, c.qtd_pecas_foto, 
+       c.precisa_manipulacao, c.detalhe_manipulacao, c.qtd_pecas_manipulacao,
+       c.precisa_video, c.qtd_pecas_video, c.observacao
+FROM processo_comunicacao c
+INNER JOIN pacote_itens pi ON pi.processo_id = c.processo_id
+WHERE pi.pacote_id = ?
+");
+$stmtInfoComunicacao->execute([$pacoteId]);
+$infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<a href="pacote.php" class="btn btn-secondary" style="margin-top:90px;"><- Voltar</a>
+
+<div class="container" style="margin-top:-10px;">
+    <h1>Detalhes do Pacote #<?= $pacoteId ?></h1>
+
+    <table class="tabela-status">
+        <tr>
+            <th>Comunicação</th>
+            <th>Agendamento Fotógrafo</th>
+            <th>Envio de Peças</th>
+        </tr>
+        <tr>
+        <tr>
+            <!-- Comunicação -->
+            <td>
+                <?php if ($pacote['status'] === 'aberto'): ?>
+                    <form action="aprovar_comunicacao.php" method="POST" 
+                        onsubmit="return confirm('Aprovar este pacote?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                        <button type="submit" class="btn-liberar">Aprovar</button>
+                    </form>
+                <?php else: ?>
+                    <span class="status aprovado">
+                        Aprovado em <?= $pacote['data_fechamento'] 
+                            ? date('d/m/Y H:i', strtotime($pacote['data_fechamento'])) 
+                            : '-' ?>
+                    </span>
+                <?php endif; ?>
+            </td>
+
+            <!-- Agendamento Fotógrafo -->
+            <td>
+                <?php if ($pacote['status'] === 'aberto'): ?>
+                    <span class="status pendente">Aguardando Comunicação</span>
+                <?php elseif (!empty($pacote['data_agendamento'])): ?>
+                    <span class="status andamento">
+                        <?= date('d/m/Y H:i', strtotime($pacote['data_agendamento'])) ?>
+                        - <?= htmlspecialchars($pacote['responsavel_fotografia']) ?>
+                    </span>
+                <?php else: ?>
+                    <form action="agendar_fotografia.php" method="POST" 
+                        onsubmit="return confirm('Confirmar agendamento do fotógrafo?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                        <input type="datetime-local" name="data_hora" required>
+                        <input type="text" name="responsavel" placeholder="Responsável" required>
+                        <button type="submit" class="btn-detalhes">Agendar</button>
+                    </form>
+                <?php endif; ?>
+            </td>
+
+            <!-- Envio de Peças -->
+            <td>
+                <?php if (!$pacote['data_agendamento']): ?>
+                    <span class="status pendente">Aguardando Fotógrafo</span>
+                <?php elseif (!$pacote['data_envio']): ?>
+                    <form action="enviar_pecas.php" method="POST" 
+                        onsubmit="return confirm('Confirmar envio das peças?');">
+                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                        <button type="submit" class="btn-detalhes">Enviar</button>
+                    </form>
+                <?php else: ?>
+                    <span class="status enviado">
+                        Enviado em <?= date('d/m/Y H:i', strtotime($pacote['data_envio'])) ?>
+                    </span>
+                <?php endif; ?>
+            </td>
+        </tr>
+
+    <h2>Itens do Pacote</h2>
+    <table class="tabela-itens">
+        <tr>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Dimensão</th>
+            <th>Marca</th>
+            <th>Qtd Foto</th>
+            <th>Precisa Video</th>
+            <th>Qtd Manipulação</th>
+            <th>Upload Foto</th>
+            <th>Upload Video</th>
+            <th>Upload Manipulação</th>
+        </tr>
+        <?php foreach ($itens as $item): ?>
+        <tr>
+            <td><?= htmlspecialchars($item['codigo_item']) ?></td>
+            <td><?= htmlspecialchars($item['descricao']) ?></td>
+            <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
+            <td><?= htmlspecialchars($item['marca']) ?></td>
+
+            <!-- Lógica para exibir quantidade de fotos/vídeos com base nas informações do processo_comunicacao -->
+            <?php
+            $qtdFoto = $item['qtd_pecas_foto'] . " peças"?? 0;
+            $qtdVideo = $item['qtd_pecas_video'] . " peças" ?? 0;
+            $precisaFoto = $item['precisa_foto'] ? ' (Foto)' : '';
+            $precisaVideo = $item['precisa_video'] ? ' (Vídeo)' : '';
+            ?>
+            <td><?= htmlspecialchars($qtdFoto . $precisaFoto) ?></td>
+            <td><?php if (htmlspecialchars($qtdVideo) > 0): ?>
+                    <?= "Sim" ?>
+                <?php else: ?>
+                    -
+                <?php endif; ?>
+
+            <td><?= htmlspecialchars($item['qtd_pecas_manipulacao'] ?? '-') ?></td>
+            
+                <td>
+                    <?php if (!empty($item["qtd_pecas_foto"])): ?>
+                        <form action="upload_imagem.php" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                            <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
+                            <input type="hidden" name="tipo" value="foto">
+
+                            <input type="file" name="arquivos[]" multiple>
+                            <button type="submit">Enviar</button>
+                            <a href=""></a>
+                        </form>
+                        <?php
+                        $stmtImgs = $pdo->prepare("
+                            SELECT id, caminho_arquivo, tipo, status 
+                            FROM item_imagens 
+                            WHERE item_id = ? AND pacote_id = ? AND tipo = 'foto'
+                        ");
+                        $stmtImgs->execute([$item['item_id'], $pacoteId]);
+                        $imagens = $stmtImgs->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+
+                        <?php if ($imagens): ?>
+                        <ul>
+                            <?php foreach ($imagens as $img): ?>
+                                <li>
+                                    <a href="uploads/<?= htmlspecialchars($img['caminho_arquivo']) ?>" target="_blank">
+                                        Visualizar <?= ucfirst($img['tipo']) ?>
+                                    </a>
+                                    (<?= $img['status'] ?>)
+                                    <form action="aprovar_imagem.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="imagem_id" value="<?= $img['id'] ?>">
+                                        <button type="submit" name="acao" value="aprovado">Aprovar</button>
+                                        <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
+                                    </form>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
+                </td>
+
+                 <td>
+                    <?php if (!empty($item["qtd_pecas_video"])): ?>
+                        <form action="upload_imagem.php" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                            <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
+                            <input type="hidden" name="tipo" value="video">
+
+                            <input type="file" name="arquivos[]" multiple>
+                            <button type="submit">Enviar</button>
+                        </form>
+                        <?php
+                        $stmtImgs = $pdo->prepare("
+                            SELECT id, caminho_arquivo, tipo, status 
+                            FROM item_imagens 
+                            WHERE item_id = ? AND pacote_id = ? AND tipo = 'video'
+                        ");
+                        $stmtImgs->execute([$item['item_id'], $pacoteId]);
+                        $imagens = $stmtImgs->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+
+                        <?php if ($imagens): ?>
+                            <ul>
+                                <?php foreach ($imagens as $img): ?>
+                                    <li>
+                                        <a href="uploads/<?= htmlspecialchars($img['caminho_arquivo']) ?>" target="_blank">
+                                            Visualizar <?= ucfirst($img['tipo']) ?>
+                                        </a>
+                                        (<?= $img['status'] ?>)
+                                        <form action="aprovar_imagem.php" method="POST" style="display:inline;">
+                                            <input type="hidden" name="imagem_id" value="<?= $img['id'] ?>">
+                                            <button type="submit" name="acao" value="aprovado">Aprovar</button>
+                                            <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
+                                        </form>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
+                </td>
+
+                <td>
+                    <?php if (!empty($item["qtd_pecas_manipulacao"])): ?>
+                        <form action="upload_imagem.php" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                            <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
+                            <input type="hidden" name="tipo" value="manipulacao">
+
+                            <input type="file" name="arquivos[]" multiple>
+                            <button type="submit">Enviar</button>
+                        </form>
+
+                        <?php
+                        $stmtImgs = $pdo->prepare("
+                            SELECT id, caminho_arquivo, tipo, status 
+                            FROM item_imagens 
+                            WHERE item_id = ? AND pacote_id = ? AND tipo = 'foto'
+                        ");
+                        $stmtImgs->execute([$item['item_id'], $pacoteId]);
+                        $imagens = $stmtImgs->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+
+                        <?php if ($imagens): ?>
+                            <ul>
+                                <?php foreach ($imagens as $img): ?>
+                                    <li>
+                                        <a href="uploads/<?= htmlspecialchars($img['caminho_arquivo']) ?>" target="_blank">
+                                            Visualizar <?= ucfirst($img['tipo']) ?>
+                                        </a>
+                                        (<?= $img['status'] ?>)
+                                        <form action="aprovar_imagem.php" method="POST" style="display:inline;">
+                                            <input type="hidden" name="imagem_id" value="<?= $img['id'] ?>">
+                                            <button type="submit" name="acao" value="aprovado">Aprovar</button>
+                                            <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
+                                        </form>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
+                </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+</div>
