@@ -72,6 +72,13 @@ foreach ($dados as $linha) {
         </div>
 
         <div class="card">
+            <h3>Design</h3>
+            <div class="numero">
+                <?= $contagem['design'] ?? 0 ?>
+            </div>
+        </div>
+
+        <div class="card">
             <h3>Total Finalizados</h3>
             <div class="numero">
                 <?= $totalFinalizados ?? 0 ?>
