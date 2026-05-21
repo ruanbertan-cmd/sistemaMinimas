@@ -117,7 +117,6 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
         <tr>
             <th>Código</th>
             <th>Descrição</th>
-            <th>Dimensão</th>
             <th>Marca</th>
             <th>Qtd Foto</th>
             <th>Precisa Video</th>
@@ -129,8 +128,7 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($itens as $item): ?>
         <tr>
             <td><?= htmlspecialchars($item['codigo_item']) ?></td>
-            <td><?= htmlspecialchars($item['descricao']) ?></td>
-            <td><?= htmlspecialchars($item['tamanho_nominal']) ?></td>
+            <td><?= htmlspecialchars($item['descricao']) . " " . htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
 
             <!-- Lógica para exibir quantidade de fotos/vídeos com base nas informações do processo_comunicacao -->
@@ -140,7 +138,7 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             $precisaFoto = $item['precisa_foto'] ? ' (Foto)' : '';
             $precisaVideo = $item['precisa_video'] ? ' (Vídeo)' : '';
             ?>
-            <td><?= htmlspecialchars($qtdFoto . $precisaFoto) ?></td>
+            <td><?= htmlspecialchars($qtdFoto) ?></td>
             <td><?php if (htmlspecialchars($qtdVideo) > 0): ?>
                     <?= "Sim" ?>
                 <?php else: ?>

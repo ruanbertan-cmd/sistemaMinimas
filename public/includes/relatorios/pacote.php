@@ -98,7 +98,7 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Ações -->
             <td>
-                <a href="pacote_detalhes.php?id=<?= $pacote['pacote_id'] ?>">Ver Itens</a>
+                <a href="pacote_detalhes.php?id=<?= $pacote['pacote_id'] ?> " class="btn-detalhes">Ver Itens</a>
             </td>
         </tr>
         <?php endforeach; ?>
