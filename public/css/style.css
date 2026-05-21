@@ -90,6 +90,30 @@ button:hover,
     background: #1b1b1b;
 }
 
+.btn-secondary {
+  display: inline-block;       /* garante que não ocupe a tela toda */
+  background-color: #6c757d;   /* cinza médio */
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;   /* cinza mais escuro no hover */
+  color: #e2e2e2;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-secondary:active {
+  background-color: #444;
+  transform: scale(0.97);
+}
+
+
 /* =========================
    DASHBOARD CARDS
 ========================= */
