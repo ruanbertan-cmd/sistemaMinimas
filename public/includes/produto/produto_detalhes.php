@@ -20,7 +20,9 @@ $manipulacoes = array_filter($arquivos, fn($a) => $a['tipo'] === 'manipulacao');
 $videos = array_filter($arquivos, fn($a) => $a['tipo'] === 'video');
 ?>
 
-<a href="produto.php" class="btn btn-secondary" style="margin-top:90px;"><- Voltar</a>
+<div style="text-align:left; margin-top:90px;">
+  <a href="produto.php" class="btn btn-secondary"><- Voltar</a>
+</div>
 
 <h2>Detalhes do Item</h2>
 

@@ -54,7 +54,9 @@ $stmtLog->execute([':id' => $processo_id]);
 $logs = $stmtLog->fetchAll();
 ?>
 
-<a href="fases.php" class="btn btn-secondary" style="margin-top:90px;"><- Voltar</a>
+<div style="text-align:left; margin-top:90px;">
+  <a href="fases.php" class="btn btn-secondary"><- Voltar</a>
+</div>
 
 <div class="container" style="margin-top:-10px;">
     <h1>Detalhes do Processo</h1>
