@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../config/conexao.php';
+session_start();
 
 $pacoteId = (int) $_POST['pacote_id'];
 $itemId   = (int) $_POST['item_id'];
@@ -16,7 +17,9 @@ foreach ($_FILES['arquivos']['tmp_name'] as $index => $tmpName) {
 
         $destino = $uploadDir . $nomeArquivo;
 
-        move_uploaded_file($tmpName, $destino);
+        if (!move_uploaded_file($tmpName, $destino)) {
+            throw new Exception("Falha ao mover o arquivo: $nomeArquivo");
+        }
 
         $stmt = $pdo->prepare("
             INSERT INTO item_imagens (item_id, pacote_id, caminho_arquivo, tipo)
@@ -27,4 +30,64 @@ foreach ($_FILES['arquivos']['tmp_name'] as $index => $tmpName) {
 }
 
 echo "Upload concluído!";
+
+$usuario = $_SESSION['usuario'] ?? 'fotografo';
+
+try {
+    $pdo->beginTransaction();
+
+    // Buscando o processo_id do item para atualizar a etapa e registrar log
+    $stmtProc = $pdo->prepare("
+        SELECT p.id 
+        FROM itens_processos p
+        INNER JOIN pacote_itens pi ON pi.processo_id = p.id
+        WHERE pi.pacote_id = ? AND p.item_id = ?
+    ");
+    $stmtProc->execute([$pacoteId, $itemId]);
+    $processoId = $stmtProc->fetchColumn();
+
+
+    // Salvando fase Atual para Atualizacao Log posteriormente
+    $stmtEtapaAtual = $pdo->prepare("
+        SELECT etapa_atual
+        FROM itens_processos
+        WHERE id = ?
+    ");
+    $stmtEtapaAtual->execute([$processoId]);
+    $etapaAtual = $stmtEtapaAtual->fetchColumn();
+    // Atualizando etada do item para a nova
+    $stmtupdate = $pdo->prepare("
+        UPDATE itens_processos
+        SET etapa_atual = 'design',
+        status_geral = 'Aguardando Aprovação das Imagens'
+        WHERE id = ?
+    ");
+    $stmtupdate->execute([
+        $processoId
+    ]);
+    // Salvando log da alteracao de fase
+    $stmtLog = $pdo->prepare("
+        INSERT INTO itens_movimentacoes
+        (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
+        VALUES (?,?,?,?,?,?,?)
+    ");
+    $stmtLog->execute([
+        $processoId,
+        $etapaAtual,
+        'design',
+        'upload_imagens',
+        'usuarioSistema',
+        'aguardando aprovação das imagens',
+        date('Y-m-d H:i:s')
+    ]);
+
+    $pdo->commit();
+
+    header("Location: fotografo.php");
+    exit;
+} catch (Exception $e) {
+    $pdo->rollBack();
+    die("Erro: " . $e->getMessage());
+}
+
 ?>
