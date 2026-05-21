@@ -10,7 +10,7 @@ $stmt = $pdo->query("
         etapa_atual,
         COUNT(*) as total
     FROM itens_processos
-    WHERE status_geral = 'em_andamento'
+    WHERE status_geral <> 'cancelado'
     GROUP BY etapa_atual
 ");
 
@@ -65,9 +65,9 @@ foreach ($dados as $linha) {
         </div>
 
         <div class="card">
-            <h3>Fotografia</h3>
+            <h3>Fotografo</h3>
             <div class="numero">
-                <?= $contagem['fotografia'] ?? 0 ?>
+                <?= $contagem['fotografo'] ?? 0 ?>
             </div>
         </div>
 
