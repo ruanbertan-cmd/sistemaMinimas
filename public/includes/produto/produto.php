@@ -31,8 +31,8 @@ $stmt = $pdo->query($sql);
 $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
-    <h2>Itens com Imagem para Aprovação</h2><br>
+<div class="container">
+    <h1>Itens com Imagem para Aprovação</h1>
     <table class="tabela-itens">
         <tr>
             <th>Uni Fabril</th>
