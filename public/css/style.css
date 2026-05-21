@@ -113,6 +113,35 @@ button:hover,
   transform: scale(0.97);
 }
 
+.upload-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+}
+
+.upload-input {
+    width: 120px;
+    font-size: 12px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.upload-btn {
+    background-color: #878787;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.upload-btn:hover {
+    background-color: #676767;
+}
+
 
 /* =========================
    DASHBOARD CARDS
