@@ -51,7 +51,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['marca']) ?></td>
             <td><?= $item['numeros_face'] ?></td>
             <td><?= $item['status_item'] ?></td>
-            <td><a href="produto_detalhes.php?item_id=<?= $item['item_id'] ?>" class="btn btn-primary">Visualizar</a></td>
+            <td><a href="produto_detalhes.php?item_id=<?= $item['item_id'] ?>" class="btn-detalhes">Visualizar</a></td>
         </tr>
         <?php endforeach; ?>
     </table>
