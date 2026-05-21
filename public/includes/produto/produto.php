@@ -32,8 +32,6 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<a href="pacote.php" class="btn btn-secondary" style="margin-top:90px;"><- Voltar</a>
-
     <h2>Itens com Imagem para Aprovação</h2><br>
     <table class="tabela-itens">
         <tr>
