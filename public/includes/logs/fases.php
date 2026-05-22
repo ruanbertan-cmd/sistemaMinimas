@@ -30,7 +30,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container">
     <h1>Fases do Processo</h1>
 
-    <table>
+    <table class="tabela-itens">
         <tr>
             <th>Uni. Fabril</th>
             <th>Código</th>

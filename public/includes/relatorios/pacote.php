@@ -24,7 +24,7 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <h1>Pacotes de Fotografia</h1>
-    <table>
+    <table class="tabela-itens">
         <tr>
             <th>ID Pacote</th>
             <th>Status</th>

@@ -328,7 +328,6 @@ input[type="file"]:hover {
 
 .tabela-status th, .tabela-status td,
 .tabela-itens th, .tabela-itens td {
-    border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
 }
