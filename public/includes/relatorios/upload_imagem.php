@@ -29,8 +29,6 @@ foreach ($_FILES['arquivos']['tmp_name'] as $index => $tmpName) {
     }
 }
 
-echo "Upload concluído!";
-
 $usuario = $_SESSION['usuario'] ?? 'fotografo';
 
 try {
@@ -59,7 +57,7 @@ try {
     $stmtupdate = $pdo->prepare("
         UPDATE itens_processos
         SET etapa_atual = 'design',
-        status_geral = 'Aguardando Aprovação das Imagens'
+        status_geral = 'aguardando_aprovacao_imagens'
         WHERE id = ?
     ");
     $stmtupdate->execute([
@@ -73,7 +71,7 @@ try {
     ");
     $stmtLog->execute([
         $processoId,
-        $etapaAtual,
+        'fotografo',
         'design',
         'upload_imagens',
         'usuarioSistema',
@@ -83,7 +81,7 @@ try {
 
     $pdo->commit();
 
-    header("Location: fotografo.php");
+    header("Location: pacote_detalhes.php?id=" . $pacoteId);
     exit;
 } catch (Exception $e) {
     $pdo->rollBack();
