@@ -94,10 +94,10 @@ button:hover,
   display: inline-block;       /* garante que não ocupe a tela toda */
   background-color: #6c757d;   /* cinza médio */
   color: #fff;
-  padding: 10px 25px;
+  padding: 8px 15px;
   border-radius: 6px;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 220;
   transition: all 0.3s ease;
   border: none;
 }
