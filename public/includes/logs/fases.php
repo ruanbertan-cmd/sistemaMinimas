@@ -90,6 +90,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         && $item['status_geral'] !== 'cancelado' 
                         && $item['status_geral'] !== 'preparando_envio' 
                         && $item['etapa_atual'] !== 'fotografo' 
+                        && $item['etapa_atual'] !== 'design' 
                         && $item['status_geral'] !== 'enviado'): ?>
 
                     <a class="btn-liberar"
@@ -98,7 +99,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
 
                 <?php elseif (!empty($item['processo_id']) 
-                            && !empty($item['data_envio'])): ?>
+                            && !empty($item['data_envio'])
+                            && $item['status_geral'] === 'enviado'): ?>
 
                     <span class="status-ok">
                         Enviado em <?= $item['data_envio'] 
@@ -113,8 +115,9 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                  <?php if (!empty($item['processo_id'])
                         && $item['status_geral'] !== 'cancelado'
                         && $item['status_geral'] !== 'preparando_envio'
-                        && $item['status_geral'] !== 'enviado'
-                        && $item['etapa_atual'] !== 'fotografo'): ?>
+                        && $item['etapa_atual'] !== 'fotografo'
+                        && $item['etapa_atual'] !== 'design'
+                        && $item['status_geral'] !== 'enviado'): ?>
                     <a class="btn-deletar"
                     href="deletar_processo.php?id=<?= urlencode($item['processo_id']) ?>"
                     onclick="return confirm('Tem certeza que deseja deletar este item?');">
