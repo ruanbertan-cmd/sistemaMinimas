@@ -37,8 +37,8 @@ try {
     // Buscando o processo_id do item para atualizar a etapa e registrar log
     $stmtProc = $pdo->prepare("
         SELECT p.id 
-        FROM itens_processos p
-        INNER JOIN pacote_itens pi ON pi.processo_id = p.id
+        FROM SM_itens_processos p
+        INNER JOIN SM_pacote_itens pi ON pi.processo_id = p.id
         WHERE pi.pacote_id = ? AND p.item_id = ?
     ");
     $stmtProc->execute([$pacoteId, $itemId]);
