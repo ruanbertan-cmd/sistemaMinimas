@@ -22,7 +22,7 @@ foreach ($_FILES['arquivos']['tmp_name'] as $index => $tmpName) {
         }
 
         $stmt = $pdo->prepare("
-            INSERT INTO item_imagens (item_id, pacote_id, caminho_arquivo, tipo)
+            INSERT INTO SM_item_imagens (item_id, pacote_id, caminho_arquivo, tipo)
             VALUES (?, ?, ?, ?)
         ");
         $stmt->execute([$itemId, $pacoteId, $nomeArquivo, $tipo]);
@@ -48,14 +48,14 @@ try {
     // Salvando fase Atual para Atualizacao Log posteriormente
     $stmtEtapaAtual = $pdo->prepare("
         SELECT etapa_atual
-        FROM itens_processos
+        FROM SM_itens_processos
         WHERE id = ?
     ");
     $stmtEtapaAtual->execute([$processoId]);
     $etapaAtual = $stmtEtapaAtual->fetchColumn();
     // Atualizando etada do item para a nova
     $stmtupdate = $pdo->prepare("
-        UPDATE itens_processos
+        UPDATE SM_itens_processos
         SET etapa_atual = 'design',
         status_geral = 'aguardando_aprovacao_imagens'
         WHERE id = ?
@@ -65,7 +65,7 @@ try {
     ]);
     // Salvando log da alteracao de fase
     $stmtLog = $pdo->prepare("
-        INSERT INTO itens_movimentacoes
+        INSERT INTO SM_itens_movimentacoes
         (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
         VALUES (?,?,?,?,?,?,?)
     ");

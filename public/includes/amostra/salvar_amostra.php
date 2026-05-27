@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Registro info Amostra
         $stmt = $pdo->prepare("
-            INSERT INTO processo_amostra
+            INSERT INTO SM_processo_amostra
             (processo_id, metodo_amostra, observacao_amostra, proxima_etapa)
             VALUES (?,?,?,?)
         ");
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtEtapaAtual = $pdo->prepare("
             SELECT etapa_atual
-            FROM itens_processos
+            FROM SM_itens_processos
             WHERE id = ?
         ");
         $stmtEtapaAtual->execute([$processoId]);
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Atualizando etapda do item para a nova
         $stmtupdate = $pdo->prepare("
-            UPDATE itens_processos
+            UPDATE SM_itens_processos
             SET etapa_atual = ?,
             status_geral = 'em_andamento'
             WHERE id = ?
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Salvando log da alteracao de fase
 
         $stmtLog = $pdo->prepare("
-            INSERT INTO itens_movimentacoes
+            INSERT INTO SM_itens_movimentacoes
             (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
             VALUES (?,?,?,?,?,?,?)
         ");

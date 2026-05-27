@@ -15,7 +15,7 @@ $processoId = (int) $_GET['id'];
 function etapaAnterior(PDO $pdo, int $processoId) {
     $ordemEtapas = ['comunicacao','detec','amostra','inteligencia_mercado','designers','fotografia'];
 
-    $stmt = $pdo->prepare("SELECT etapa_atual FROM itens_processos WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT etapa_atual FROM SM_itens_processos WHERE id = ?");
     $stmt->execute([$processoId]);
     $etapaAtual = $stmt->fetchColumn();
 
@@ -49,8 +49,8 @@ $stmt = $pdo->prepare("
         i.marca,
         i.unidade_fabricacao,
         i.numeros_face
-    FROM itens_processos p
-    INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
+    FROM SM_itens_processos p
+    INNER JOIN SM_cadastros_itens_minimas i ON i.id = p.item_id
     WHERE p.id = ?
 ");
 

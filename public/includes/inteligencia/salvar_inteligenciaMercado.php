@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Registro info Inteligencia de Mercado
         $stmt = $pdo->prepare("
-            INSERT INTO processo_inteligenciaMercado
+            INSERT INTO SM_processo_inteligenciaMercado
             (processo_id, pecas_separadas, qtd_de_acordo, qualidade, identificacao, observacao_inteligenciaMercado, proxima_etapa)
             VALUES (?,?,?,?,?,?,?)
         ");
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtEtapaAtual = $pdo->prepare("
             SELECT etapa_atual
-            FROM itens_processos
+            FROM SM_itens_processos
             WHERE id = ?
         ");
         $stmtEtapaAtual->execute([$processoId]);
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($proximaEtapaInteligenciaMercado === 'fotografia') {
             // Caso especial: Fotografia precisa passar por Comunicação (aprovação)
             $stmtupdate = $pdo->prepare("
-                UPDATE itens_processos
+                UPDATE SM_itens_processos
                 SET etapa_atual = 'comunicacao',
                     status_geral = 'preparando_envio'
                 WHERE id = ?
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Demais etapas seguem fluxo normal
             $stmtupdate = $pdo->prepare("
-                UPDATE itens_processos
+                UPDATE SM_itens_processos
                 SET etapa_atual = ?,
                     status_geral = 'em_andamento'
                 WHERE id = ?
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             : $proximaEtapaInteligenciaMercado;
 
         $stmtLog = $pdo->prepare("
-            INSERT INTO itens_movimentacoes
+            INSERT INTO SM_itens_movimentacoes
             (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
             VALUES (?,?,?,?,?,?,?)
         ");

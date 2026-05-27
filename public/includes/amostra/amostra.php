@@ -67,10 +67,10 @@ $stmt = $pdo->prepare("
         d.aprovado_por,
         d.data_aprovacao
 
-    FROM itens_processos p
-    INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
-    LEFT JOIN processo_comunicacao c ON c.processo_id = p.id
-    LEFT JOIN processo_detec d ON d.processo_id = p.id
+    FROM SM_itens_processos p
+    INNER JOIN SM_cadastros_itens_minimas i ON i.id = p.item_id
+    LEFT JOIN SM_processo_comunicacao c ON c.processo_id = p.id
+    LEFT JOIN SM_processo_detec d ON d.processo_id = p.id
     WHERE p.id = ?
 ");
 

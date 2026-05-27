@@ -18,11 +18,11 @@ SELECT
         WHEN SUM(im.status = 'rejeitado') > 0 THEN 'Rejeitado'
         ELSE 'Aprovado'
     END AS status_item
-FROM cadastros_itens_minimas i
-INNER JOIN itens_processos p ON p.item_id = i.id
-INNER JOIN pacote_itens pi ON pi.processo_id = p.id
-INNER JOIN pacotes_envio pe ON pe.id = pi.pacote_id
-INNER JOIN item_imagens im ON im.item_id = i.id AND im.pacote_id = pe.id
+FROM SM_cadastros_itens_minimas i
+INNER JOIN SM_itens_processos p ON p.item_id = i.id
+INNER JOIN SM_pacote_itens pi ON pi.processo_id = p.id
+INNER JOIN SM_pacotes_envio pe ON pe.id = pi.pacote_id
+INNER JOIN SM_item_imagens im ON im.item_id = i.id AND im.pacote_id = pe.id
 GROUP BY i.id, i.unidade_fabricacao, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca
 ORDER BY i.id DESC
 

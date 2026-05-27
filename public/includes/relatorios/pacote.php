@@ -14,8 +14,8 @@ $stmt = $pdo->query("
         p.responsavel_fotografia,
         p.data_envio,
         COUNT(pi.id) AS qtd_itens
-    FROM pacotes_envio p
-    LEFT JOIN pacote_itens pi ON pi.pacote_id = p.id
+    FROM SM_pacotes_envio p
+    LEFT JOIN SM_pacote_itens pi ON pi.pacote_id = p.id
     GROUP BY p.id
     ORDER BY p.id DESC
 ");

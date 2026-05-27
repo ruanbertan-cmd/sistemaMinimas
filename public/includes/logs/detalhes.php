@@ -26,8 +26,8 @@ SELECT
     i.marca,
     p.etapa_atual,
     p.status_geral
-FROM itens_processos p
-JOIN cadastros_itens_minimas i ON i.id = p.item_id
+FROM SM_itens_processos p
+JOIN SM_cadastros_itens_minimas i ON i.id = p.item_id
 WHERE p.id = :id
 ";
 
@@ -44,7 +44,7 @@ if (!$item) {
 /* Buscar histórico */
 $sqlLog = "
 SELECT area_origem, area_destino, acao, usuario, observacao, data_acao
-FROM itens_movimentacoes
+FROM SM_itens_movimentacoes
 WHERE processo_id = :id
 ORDER BY data_acao ASC
 ";

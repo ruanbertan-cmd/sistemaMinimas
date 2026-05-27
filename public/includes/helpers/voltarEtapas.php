@@ -14,7 +14,7 @@ function voltarEtapa(PDO $pdo, int $processoId, string $usuario, string $observa
     ];
 
     // Buscar etapa atual
-    $stmt = $pdo->prepare("SELECT etapa_atual FROM itens_processos WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT etapa_atual FROM SM_itens_processos WHERE id = ?");
     $stmt->execute([$processoId]);
     $etapaAtual = $stmt->fetchColumn();
 
@@ -32,7 +32,7 @@ function voltarEtapa(PDO $pdo, int $processoId, string $usuario, string $observa
     // Atualizar etapa
     $pdo->beginTransaction();
     $stmtUpdate = $pdo->prepare("
-        UPDATE itens_processos
+        UPDATE SM_itens_processos
         SET etapa_atual = ?, status_geral = 'em_andamento'
         WHERE id = ?
     ");
@@ -40,7 +40,7 @@ function voltarEtapa(PDO $pdo, int $processoId, string $usuario, string $observa
 
     // Registrar log
     $stmtLog = $pdo->prepare("
-        INSERT INTO itens_movimentacoes
+        INSERT INTO SM_itens_movimentacoes
         (processo_id, area_origem, area_destino, acao, usuario, observacao)
         VALUES (?,?,?,?,?,?)
     ");

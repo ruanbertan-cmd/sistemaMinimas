@@ -9,7 +9,7 @@ $pacoteId = (int) $_GET['id'];
 $stmtPacote = $pdo->prepare("
     SELECT id, status, data_criacao, data_fechamento, aprovado_por,
            data_agendamento, responsavel_fotografia, data_envio
-    FROM pacotes_envio
+    FROM SM_pacotes_envio
     WHERE id = ?
 ");
 $stmtPacote->execute([$pacoteId]);
@@ -19,10 +19,10 @@ $pacote = $stmtPacote->fetch(PDO::FETCH_ASSOC);
 $stmtItens = $pdo->prepare("
     SELECT i.id AS item_id, i.codigo_item, i.descricao, i.tamanho_nominal, i.marca,
            c.metodo_imagem, c.precisa_foto, c.qtd_pecas_foto, c.qtd_pecas_manipulacao, c.precisa_video, c.qtd_pecas_video
-    FROM pacote_itens pi
-    INNER JOIN itens_processos p ON p.id = pi.processo_id
-    INNER JOIN cadastros_itens_minimas i ON i.id = p.item_id
-    LEFT JOIN processo_comunicacao c ON c.processo_id = p.id
+    FROM SM_pacote_itens pi
+    INNER JOIN SM_itens_processos p ON p.id = pi.processo_id
+    INNER JOIN SM_cadastros_itens_minimas i ON i.id = p.item_id
+    LEFT JOIN SM_processo_comunicacao c ON c.processo_id = p.id
     WHERE pi.pacote_id = ?
 ");
 $stmtItens->execute([$pacoteId]);
@@ -34,8 +34,8 @@ $stmtInfoComunicacao = $pdo->prepare("
     SELECT c.metodo_imagem, c.precisa_foto, c.qtd_pecas_foto, 
        c.precisa_manipulacao, c.detalhe_manipulacao, c.qtd_pecas_manipulacao,
        c.precisa_video, c.qtd_pecas_video, c.observacao
-FROM processo_comunicacao c
-INNER JOIN pacote_itens pi ON pi.processo_id = c.processo_id
+FROM SM_processo_comunicacao c
+INNER JOIN SM_pacote_itens pi ON pi.processo_id = c.processo_id
 WHERE pi.pacote_id = ?
 ");
 $stmtInfoComunicacao->execute([$pacoteId]);

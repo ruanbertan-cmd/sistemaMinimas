@@ -7,7 +7,7 @@ $itemId = (int) $_GET['item_id'];
 
 $stmt = $pdo->prepare("
     SELECT id, caminho_arquivo, tipo, status
-    FROM item_imagens
+    FROM SM_item_imagens
     WHERE item_id = ?
     ORDER BY tipo, id
 ");

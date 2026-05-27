@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Registro info comunicação
         $stmt = $pdo->prepare("
-            INSERT INTO processo_comunicacao
+            INSERT INTO SM_processo_comunicacao
             (processo_id, metodo_imagem, precisa_foto, qtd_pecas_foto, precisa_manipulacao, detalhe_manipulacao, qtd_pecas_manipulacao, precisa_video, qtd_pecas_video, observacao)
             VALUES (?,?,?,?,?,?,?,?,?,?)
         ");
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtEtapaAtual = $pdo->prepare("
             SELECT etapa_atual
-            FROM itens_processos
+            FROM SM_itens_processos
             WHERE id = ?
         ");
         $stmtEtapaAtual->execute([$processoId]);
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Atualizando etapda do item para a nova
         $stmtupdate = $pdo->prepare("
-            UPDATE itens_processos
+            UPDATE SM_itens_processos
             SET etapa_atual = ?,
             status_geral = 'em_andamento'
             WHERE id = ?
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Salvando log da alteracao de fase
 
         $stmtLog = $pdo->prepare("
-            INSERT INTO itens_movimentacoes
+            INSERT INTO SM_itens_movimentacoes
             (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
             VALUES (?,?,?,?,?,?,?)
         ");

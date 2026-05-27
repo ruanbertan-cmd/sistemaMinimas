@@ -10,7 +10,7 @@ try {
 
     // Atualiza pacote com data de envio
     $stmt = $pdo->prepare("
-        UPDATE pacotes_envio
+        UPDATE SM_pacotes_envio
         SET data_envio = NOW()
         WHERE id = ?
     ");
@@ -18,17 +18,17 @@ try {
 
     // Atualiza todos os itens vinculados para status 'enviado' e data que o processo foi finalizado
     $stmtItens = $pdo->prepare("
-        UPDATE itens_processos
+        UPDATE SM_itens_processos
         SET status_geral = 'enviado', finalizado = NOW()
-        WHERE id IN (SELECT processo_id FROM pacote_itens WHERE pacote_id = ?)
+        WHERE id IN (SELECT processo_id FROM SM_pacote_itens WHERE pacote_id = ?)
     ");
     $stmtItens->execute([$pacoteId]);
 
     // Registrar movimentação
     $stmtLog = $pdo->prepare("
-        INSERT INTO itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
+        INSERT INTO SM_itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
         SELECT processo_id, 'fotografo', 'amostra', 'envio_pecas', ?, 'Peças enviadas'
-        FROM pacote_itens
+        FROM SM_pacote_itens
         WHERE pacote_id = ?
     ");
     $stmtLog->execute([$usuario, $pacoteId]);

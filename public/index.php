@@ -9,13 +9,13 @@ $stmt = $pdo->query("
     SELECT 
         etapa_atual,
         COUNT(*) as total
-    FROM itens_processos
+    FROM SM_itens_processos
     WHERE status_geral <> 'cancelado'
     GROUP BY etapa_atual
 ");
 
 $stmtFinalizados = $pdo->query("
-    SELECT COUNT(*) FROM itens_processos
+    SELECT COUNT(*) FROM SM_itens_processos
     WHERE status_geral = 'finalizado' OR status_geral = 'enviado'
 ");
 

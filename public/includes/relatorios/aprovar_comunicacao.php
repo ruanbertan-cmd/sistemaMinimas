@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../../config/conexao.php';
 session_start();
 
 $pacoteId = (int) $_POST['pacote_id'];
+$processoId = (int) $_POST['processo_id'];
 $usuario = $_SESSION['usuario'] ?? 'comunicacao';
 
 try {
@@ -10,7 +11,7 @@ try {
 
     // Atualiza pacote para finalizado
     $stmt = $pdo->prepare("
-        UPDATE pacotes_envio
+        UPDATE SM_pacotes_envio
         SET status = 'finalizado',
             data_fechamento = NOW(),
             aprovado_por = ?
@@ -20,23 +21,23 @@ try {
 
     // Atualiza todos os itens vinculados
     $stmtItens = $pdo->prepare("
-        UPDATE itens_processos
+        UPDATE SM_itens_processos
         SET status_geral = 'preparando_envio'
-        WHERE id IN (SELECT processo_id FROM pacote_itens WHERE pacote_id = ?)
+        WHERE id IN (SELECT processo_id FROM SM_pacote_itens WHERE pacote_id = ?)
     ");
     $stmtItens->execute([$pacoteId]);
 
     // Salvando fase Atual para Atualizacao Log posteriormente
     $stmtEtapaAtual = $pdo->prepare("
         SELECT etapa_atual
-        FROM itens_processos
+        FROM SM_itens_processos
         WHERE id = ?
     ");
     $stmtEtapaAtual->execute([$processoId]);
     $etapaAtual = $stmtEtapaAtual->fetchColumn();
     // Atualizando etapda do item para a nova
     $stmtupdate = $pdo->prepare("
-        UPDATE itens_processos
+        UPDATE SM_itens_processos
         SET etapa_atual = ?,
         status_geral = 'em_andamento'
         WHERE id = ?
@@ -47,7 +48,7 @@ try {
     ]);
     // Salvando log da alteracao de fase
     $stmtLog = $pdo->prepare("
-        INSERT INTO itens_movimentacoes
+        INSERT INTO SM_itens_movimentacoes
         (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
         VALUES (?,?,?,?,?,?,?)
     ");

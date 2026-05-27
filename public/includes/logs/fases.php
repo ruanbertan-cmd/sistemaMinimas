@@ -15,10 +15,10 @@ SELECT
     p.etapa_atual,
     p.status_geral,
     pe.data_envio
-FROM cadastros_itens_minimas i
-LEFT JOIN itens_processos p ON p.item_id = i.id
-LEFT JOIN pacote_itens pi ON pi.processo_id = p.id
-LEFT JOIN pacotes_envio pe ON pe.id = pi.pacote_id
+FROM SM_cadastros_itens_minimas i
+LEFT JOIN SM_itens_processos p ON p.item_id = i.id
+LEFT JOIN SM_pacote_itens pi ON pi.processo_id = p.id
+LEFT JOIN SM_pacotes_envio pe ON pe.id = pi.pacote_id
 ORDER BY i.id DESC
 ";
 $stmt = $pdo->query($sql);

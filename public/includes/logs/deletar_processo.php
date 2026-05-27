@@ -13,12 +13,12 @@ $processoId = (int) $_GET['id'];
 
 try {
     // Atualizar status para cancelado
-    $stmt = $pdo->prepare("UPDATE itens_processos SET status_geral = 'cancelado' WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE SM_itens_processos SET status_geral = 'cancelado' WHERE id = ?");
     $stmt->execute([$processoId]);
 
     // Registrar movimentação de cancelamento
     $stmtLog = $pdo->prepare("
-        INSERT INTO itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
+        INSERT INTO SM_itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
         VALUES (?, ?, ?, ?, ?, ?)
     ");
     $stmtLog->execute([

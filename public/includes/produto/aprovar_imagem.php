@@ -8,7 +8,7 @@ if (!in_array($acao, ['aprovado','rejeitado'])) {
     die("Ação inválida.");
 }
 
-$stmt = $pdo->prepare("UPDATE item_imagens SET status = ? WHERE id = ?");
+$stmt = $pdo->prepare("UPDATE SM_item_imagens SET status = ? WHERE id = ?");
 $stmt->execute([$acao, $imagemId]);
 
 header("Location: " . $_SERVER['HTTP_REFERER']);
@@ -24,8 +24,8 @@ try {
     // Buscando o processo_id do item para atualizar a etapa e registrar log
     $stmtProc = $pdo->prepare("
         SELECT p.id 
-        FROM itens_processos p
-        INNER JOIN pacote_itens pi ON pi.processo_id = p.id
+        FROM SM_itens_processos p
+        INNER JOIN SM_pacote_itens pi ON pi.processo_id = p.id
         WHERE pi.pacote_id = ? AND p.item_id = ?
     ");
     $stmtProc->execute([$pacoteId, $itemId]);
@@ -35,7 +35,7 @@ try {
     // Salvando fase Atual para Atualizacao Log posteriormente
     $stmtEtapaAtual = $pdo->prepare("
         SELECT etapa_atual
-        FROM itens_processos
+        FROM SM_itens_processos
         WHERE id = ?
     ");
     $stmtEtapaAtual->execute([$processoId]);
@@ -44,12 +44,12 @@ try {
     $stmtupdate = $pdo->prepare("
 
         if ($acao === 'aprovado') {
-            UPDATE itens_processos
+            UPDATE SM_itens_processos
             SET etapa_atual = 'sistema_imagem',
             status_geral = 'Imagem Aprovada'
             WHERE id = ?
         } else {
-            UPDATE itens_processos
+            UPDATE SM_itens_processos
             SET etapa_atual = 'fotografo',
             status_geral = 'Imagem Rejeitada'
             WHERE id = ?
@@ -70,7 +70,7 @@ try {
     }
 
     $stmtLog = $pdo->prepare("
-        INSERT INTO itens_movimentacoes
+        INSERT INTO SM_itens_movimentacoes
         (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
         VALUES (?,?,?,?,?,?,?)
     ");

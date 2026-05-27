@@ -15,7 +15,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
             $pdo->beginTransaction();
 
             $stmtItem = $pdo->prepare("
-                INSERT INTO cadastros_itens_minimas (
+                INSERT INTO SM_cadastros_itens_minimas (
                     marca,
                     categoria_pt_br,
                     categoria_us,
@@ -70,12 +70,12 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
             ");
 
             $stmtProcesso = $pdo->prepare("
-                INSERT INTO itens_processos (item_id, etapa_atual, status_geral)
+                INSERT INTO SM_itens_processos (item_id, etapa_atual, status_geral)
                 VALUES (?, 'comunicacao', 'em_andamento')
             ");
 
             $stmtLog = $pdo->prepare("
-                INSERT INTO itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
+                INSERT INTO SM_itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
                 VALUES (?, 'Criação de Item', 'Inteligência de Mercado', 'Processo Iniciado', 'usuario', 'Inicio do Processo', NOW())
             "); // Aqui idealmente deveria ser o usuário logado, mas como não temos sistema de login, deixei um placeholder
 
