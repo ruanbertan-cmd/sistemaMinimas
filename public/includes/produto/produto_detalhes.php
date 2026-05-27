@@ -77,7 +77,7 @@ function closeModal() {
     </tr>
     <tr>
         <!-- Fotos -->
-        <td>
+        <td style="vertical-align: top;">
             <?php foreach ($fotos as $foto): ?>
                 <div style="margin:10px;">
                     <img src="../relatorios/uploads/<?= htmlspecialchars($foto['caminho_arquivo']) ?>" 
@@ -98,7 +98,7 @@ function closeModal() {
         </td>
 
         <!-- Manipulações -->
-        <td>
+        <td style="vertical-align: top;">
             <?php foreach ($manipulacoes as $manip): ?>
                 <div style="margin:10px;">
                     <img src="../relatorios/uploads/<?= htmlspecialchars($manip['caminho_arquivo']) ?>" 
@@ -119,7 +119,7 @@ function closeModal() {
         </td>
 
         <!-- Vídeos -->
-        <td>
+        <td style="vertical-align: top;">
             <?php foreach ($videos as $video): ?>
                 <div style="margin:10px;">
                     <video width="200" controls>
