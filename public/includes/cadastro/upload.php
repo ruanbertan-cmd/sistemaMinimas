@@ -61,10 +61,10 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     responsavel_carga
                 )
                 VALUES (
-                    ?,?,?,?,?,?,?,?,?,?,
-                    ?,?,?,?,?,?,?,?,?,?,
-                    ?,?,?,?,?,?,?,?,?,?,
-                    ?,?,?,?,?,?,?,?,?,?,
+                    UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),?,UPPER(?),UPPER(?),
+                    UPPER(?),?,?,UPPER(?),UPPER(?),?,?,?,UPPER(?),?,
+                    UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),
+                    UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),?,UPPER(?),?,UPPER(REPLACE(?, ' ', '')),UPPER(?),
                     ?,NOW(),'usuario Cadastrante'
                 )
             ");
