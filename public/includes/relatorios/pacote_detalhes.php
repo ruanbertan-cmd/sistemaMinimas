@@ -121,9 +121,7 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             <th>Qtd Foto</th>
             <th>Precisa Video</th>
             <th>Qtd Manipulação</th>
-            <th>Upload Foto</th>
-            <th>Upload Video</th>
-            <th>Upload Manipulação</th>
+            <th>Upload</th>
         </tr>
         <?php foreach ($itens as $item): ?>
         <tr>
@@ -149,49 +147,28 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             
             <td>
                 <?php if (!empty($item["qtd_pecas_foto"])): ?>
-                    <form class="upload-form" action="upload_imagem.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
-                        <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
-                        <input type="hidden" name="tipo" value="foto">
 
-                        <input type="file" name="arquivos[]" multiple class="upload-input">
-                        <button type="submit" class="upload-btn">Enviar</button>
+                    <form class="upload-form" action="upload_imagem.php" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="modeloImagem">Procedimento Imagem Still</label>
+                            <select name="tipo" id="modeloImagem" required>
+                                <option value=""></option>
+                                <option value="foto">Foto</option>
+                                <option value="video">Video</option>
+                                <option value="manipulada">Manipulacao</option>
+                            </select>
+                        
+                            <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                            <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
+                            <input type="file" name="arquivos[]" multiple class="upload-input">
+                            <button type="submit" class="upload-btn">Enviar</button>
+                        </div>
                     </form>
+
                 <?php else: ?>
                     -
                 <?php endif; ?>
             </td>
-
-            <td>
-                <?php if (!empty($item["qtd_pecas_video"])): ?>
-                    <form class="upload-form" action="upload_imagem.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
-                        <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
-                        <input type="hidden" name="tipo" value="video">
-
-                        <input type="file" name="arquivos[]" multiple class="upload-input">
-                        <button type="submit" class="upload-btn">Enviar</button>
-                    </form>
-                <?php else: ?>
-                    -
-                <?php endif; ?>
-            </td>
-
-            <td>
-                <?php if (!empty($item["qtd_pecas_manipulacao"])): ?>
-                    <form class="upload-form" action="upload_imagem.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
-                        <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
-                        <input type="hidden" name="tipo" value="manipulacao">
-
-                        <input type="file" name="arquivos[]" multiple class="upload-input">
-                        <button type="submit" class="upload-btn">Enviar</button>
-                    </form>
-                <?php else: ?>
-                    -
-                <?php endif; ?>
-            </td>
-
         </tr>
         <?php endforeach; ?>
     </table>

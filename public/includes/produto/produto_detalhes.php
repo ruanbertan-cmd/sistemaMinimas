@@ -16,7 +16,7 @@ $arquivos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Agrupar por tipo
 $fotos = array_filter($arquivos, fn($a) => $a['tipo'] === 'foto');
-$manipulacoes = array_filter($arquivos, fn($a) => $a['tipo'] === 'manipulacao');
+$manipulacoes = array_filter($arquivos, fn($a) => $a['tipo'] === 'manipulada');
 $videos = array_filter($arquivos, fn($a) => $a['tipo'] === 'video');
 ?>
 
