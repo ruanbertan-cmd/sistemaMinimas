@@ -150,7 +150,6 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
 
                     <form class="upload-form" action="upload_imagem.php" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label for="modeloImagem">Procedimento Imagem Still</label>
                             <select name="tipo" id="modeloImagem" required>
                                 <option value=""></option>
                                 <option value="foto">Foto</option>
