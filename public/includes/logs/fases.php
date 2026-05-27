@@ -44,7 +44,11 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php foreach ($itens as $item): ?>
         <tr>
-            <td><?= htmlspecialchars($item['unidade_fabricacao']) ?></td>
+            <td><?php if ($item['unidade_fabricacao'] === 'SCINDOUT' || $item['unidade_fabricacao'] === 'SCOUT.INTERN' || $item['unidade_fabricacao'] === 'SCOUT.NACIONAL' || $item['unidade_fabricacao'] === 'OUT.VINILICOSC'): ?>
+                <?= "OUTSOURCING" ?>
+            <?php else: ?>
+                <?= htmlspecialchars($item['unidade_fabricacao']) ?>
+            <?php endif; ?></td>
             <td><?= htmlspecialchars($item['codigo_item']) ?></td>
             <td><?= htmlspecialchars($item['descricao']) . ' ' . htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
