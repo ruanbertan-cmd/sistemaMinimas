@@ -149,19 +149,17 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
                 <?php if (!empty($item["qtd_pecas_foto"])): ?>
 
                     <form class="upload-form" action="upload_imagem.php" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <select name="tipo" id="modeloImagem" required>
-                                <option value=""></option>
-                                <option value="foto">Foto</option>
-                                <option value="video">Video</option>
-                                <option value="manipulada">Manipulacao</option>
-                            </select>
-                        
-                            <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
-                            <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
-                            <input type="file" name="arquivos[]" multiple class="upload-input">
-                            <button type="submit" class="upload-btn">Enviar</button>
-                        </div>
+                         <select name="tipo" id="modeloImagem" required>
+                             <option value=""></option>
+                             <option value="foto">Foto</option>
+                             <option value="video">Video</option>
+                             <option value="manipulada">Manipulacao</option>
+                         </select>
+                    
+                         <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                         <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
+                         <input type="file" name="arquivos[]" multiple class="upload-input">
+                         <button type="submit" class="upload-btn">Enviar</button>
                     </form>
 
                 <?php else: ?>
