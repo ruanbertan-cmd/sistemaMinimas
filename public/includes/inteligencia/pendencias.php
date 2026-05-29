@@ -13,7 +13,7 @@ $processoId = (int) $_GET['id'];
 $stmt = $pdo->prepare("
     SELECT tipo_pendencia, caminho_arquivo, descricao, status_evidencia
     FROM SM_evidencias_inteligenciaMercado
-    WHERE processo_id = ?
+    WHERE processo_id = ? AND status_evidencia = 'pendente'
 ");
 $stmt->execute([$processoId]);
 $pendencias = $stmt->fetchAll();
