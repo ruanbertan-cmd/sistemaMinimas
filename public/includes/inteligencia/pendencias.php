@@ -49,8 +49,8 @@ $pendencias = $stmt->fetchAll();
                     <label>Encaminhar para:</label>
                     <select name="proxima_etapa" required>
                         <option value=""></option>
-                        <option value="detec">Detec</option>
-                        <option value="amostra">Amostra</option>
+                        <option value="detec">Amostra</option>
+                        <option value="inteligencia_mercado">Inteligência Mercado</option>
                     </select>
 
                     <button type="submit" name="acao" value="validar">Validar Pendência</button>
