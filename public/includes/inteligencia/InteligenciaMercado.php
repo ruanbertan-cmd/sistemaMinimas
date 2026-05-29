@@ -100,31 +100,34 @@ if (!$processo) {
     </div>
 
     <div class="card">
-        <form action="salvar_inteligenciaMercado.php" method="POST">
+        <form action="salvar_inteligenciaMercado.php" method="POST" enctype="multipart/form-data">
 
             <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
             <h1>Validação checagem dos produtos</h1>
 
             <div class="form-group" id="blocoChecagem">
-                Produto encontrado na amostra?
+                Produto não encontrado
                 <label>
-                    <input type="checkbox" name="pecas_separadas" value="1">
+                    <input type="checkbox" id="pecas_separadas" name="pecas_separadas" value="1">
                 </label>
 
-                Quantidade de acordo com o solicitado?
+                Quantidade diferente do solicitado
                 <label>
-                    <input type="checkbox" name="qtd_de_acordo" value="1">
+                    <input type="checkbox" id="qtd_diferente" name="qtd_diferente" value="1">
+                    <input type="file" id="arquivo_qtd" name="arquivo_qtd" accept="image/*" style="display:none;">
                 </label>
 
-                Qualidade de acordo com o esperado (Sem lascas ou arranhados no desenho)?
+                Defeito na peça (Lascado, amassado, risco, etc)
                 <label>
-                    <input type="checkbox" name="qualidade" value="1">
+                    <input type="checkbox" id="qualidade" name="qualidade" value="1">
+                    <input type="file" id="arquivo_qualidade" name="arquivo_qualidade" accept="image/*" style="display:none;">
                 </label>
                 
-                Identificação correta (Nome dos produtos escrito nas peças)?
+                Falta de Identificação (Nome do produto na peça)
                 <label>
-                    <input type="checkbox" name="identificacao" value="1">
+                    <input type="checkbox" id="identificacao" name="identificacao" value="1">
+                    <input type="file" id="arquivo_identificacao" name="arquivo_identificacao" accept="image/*" style="display:none;">
                 </label>
 
             </div>
@@ -155,4 +158,30 @@ if (!$processo) {
     </div>
 </div>
 
+<script>
+  function toggleFileInput(checkboxId, fileInputId) {
+    const checkbox = document.getElementById(checkboxId);
+    const fileInput = document.getElementById(fileInputId);
+
+    // Estado inicial: escondido
+    fileInput.style.display = 'none';
+
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        fileInput.style.display = 'inline';
+      } else {
+        fileInput.style.display = 'none';
+        fileInput.value = ''; // limpa arquivo selecionado
+      }
+    });
+  }
+
+  // Ativa para cada par
+  toggleFileInput('qtd_diferente', 'arquivo_qtd');
+  toggleFileInput('qualidade', 'arquivo_qualidade');
+  toggleFileInput('identificacao', 'arquivo_identificacao');
+</script>
+
+
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>
+

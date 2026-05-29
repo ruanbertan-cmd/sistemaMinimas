@@ -6,10 +6,10 @@ require_once __DIR__ . '/../../../config/conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $processoId = (int) $_POST['processo_id'];
-    $pecasSeparadas = $_POST['pecas_separadas'] ?? '';
-    $qtdDeAcordo = $_POST['qtd_de_acordo'] ?? '';
-    $qualidade = $_POST['qualidade'] ?? '';
-    $identificacao = $_POST['identificacao'] ?? '';
+    $pecasSeparadas = $_POST['pecas_separadas'] ?? 0;
+    $qtdDiferente = $_POST['qtd_diferente'] ?? 0;
+    $qualidade = $_POST['qualidade'] ?? 0;
+    $identificacao = $_POST['identificacao'] ?? 0;
     $observacaoInteligenciaMercado = $_POST['observacao_inteligenciaMercado'] ?? '';
     $proximaEtapaInteligenciaMercado = $_POST['proxima_etapa'] ?? '';
 
@@ -20,22 +20,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Registro info Inteligencia de Mercado
         $stmt = $pdo->prepare("
             INSERT INTO SM_processo_inteligenciaMercado
-            (processo_id, pecas_separadas, qtd_de_acordo, qualidade, identificacao, observacao_inteligenciaMercado, proxima_etapa)
+            (processo_id, pecas_separadas, qtd_diferente, qualidade, identificacao, observacao_inteligenciaMercado, proxima_etapa)
             VALUES (?,?,?,?,?,?,?)
         ");
 
         $stmt->execute([
             $processoId,
             $pecasSeparadas,
-            $qtdDeAcordo,
+            $qtdDiferente,
             $qualidade,
             $identificacao,
             $observacaoInteligenciaMercado,
             $proximaEtapaInteligenciaMercado
         ]);
 
-        // Salvando fase Atual para Atualizacao Log posteriormente
+        // Lista de pendências que podem ter evidência
+        $pendencias = [
+            'arquivo_qtd'           => 'qtd_diferente',
+            'arquivo_qualidade'     => 'qualidade',
+            'arquivo_identificacao' => 'identificacao'
+        ];
 
+        $flags = [
+            'pecas_separadas'  => $pecasSeparadas,
+            'qtd_diferente'    => $qtdDiferente,
+            'qualidade'        => $qualidade,
+            'identificacao'    => $identificacao
+        ];
+
+        foreach ($pendencias as $campoArquivo => $tipoPendencia) {
+            if ($flags[$tipoPendencia] == 1) {
+                $nomeArquivo = null;
+
+                // Se tiver arquivo válido, move e guarda o nome
+                if (!empty($_FILES[$campoArquivo]['name']) && $_FILES[$campoArquivo]['error'] === 0) {
+                    $arquivoTmp = $_FILES[$campoArquivo]['tmp_name'];
+                    $nomeArquivo = uniqid() . '_' . basename($_FILES[$campoArquivo]['name']);
+                    $destino = __DIR__ . '/evidencias/' . $nomeArquivo;
+                    move_uploaded_file($arquivoTmp, $destino);
+                }
+
+                // Sempre insere a pendência, mesmo sem arquivo
+                $stmtEvidencia = $pdo->prepare("
+                    INSERT INTO SM_evidencias_inteligenciaMercado
+                    (processo_id, tipo_pendencia, caminho_arquivo, data_registro, registrado_por, status_evidencia)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ");
+                $stmtEvidencia->execute([
+                    $processoId,
+                    $tipoPendencia,
+                    $nomeArquivo, // pode ser null
+                    date('Y-m-d H:i:s'),
+                    'usuarioSistema',
+                    'pendente'
+                ]);
+            }
+        }
+
+        // Salvando fase Atual para Atualizacao Log posteriormente
         $stmtEtapaAtual = $pdo->prepare("
             SELECT etapa_atual
             FROM SM_itens_processos
