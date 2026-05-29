@@ -69,13 +69,20 @@ $stmt = $pdo->prepare("
 
         e.metodo_amostra,
         e.observacao_amostra,
-        e.proxima_etapa AS proxima_etapa_amostra
+        e.proxima_etapa AS proxima_etapa_amostra,
+
+        f.tipo_pendencia,
+        f.caminho_arquivo,
+        f.descricao,
+        f.status_evidencia,
+        f.comentario_validacao
 
     FROM SM_itens_processos p
     INNER JOIN SM_cadastros_itens_minimas i ON i.id = p.item_id
     LEFT JOIN SM_processo_comunicacao c ON c.processo_id = p.id
     LEFT JOIN SM_processo_detec d ON d.processo_id = p.id
     LEFT JOIN SM_processo_amostra e ON e.processo_id = p.id
+    LEFT JOIN SM_evidencias_inteligenciaMercado f ON f.processo_id = p.id
     WHERE p.id = ?
 ");
 
@@ -88,73 +95,99 @@ if (!$processo) {
 ?>
 
 <div class="container">
-    <h1>Liberação - Inteligencia de Mercado</h1>
+    <h1>Liberação - Inteligência de Mercado</h1>
 
     <div class="card">
         <h3>Informações do Item</h3>
         <p><strong>Código:</strong> <?= htmlspecialchars($processo['codigo_item']) ?></p>
-        <p><strong>Descrição:</strong> <?= htmlspecialchars($processo['descricao'] . ' ' . $processo['tamanho_nominal'])?>
+        <p><strong>Descrição:</strong> <?= htmlspecialchars($processo['descricao'] . ' ' . $processo['tamanho_nominal'])?></p>
         <p><strong>Marca:</strong> <?= htmlspecialchars($processo['marca']) ?></p>
         <p><strong>Unidade:</strong> <?= htmlspecialchars($processo['unidade_fabricacao']) ?></p>
         <p><strong>Números de Faces:</strong> <?= $processo['numeros_face'] ?></p>
     </div>
 
-    <div class="card">
-        <form action="salvar_inteligenciaMercado.php" method="POST" enctype="multipart/form-data">
+    <!-- Flex container para dividir em duas colunas -->
+    <div style="display:flex; gap:20px;">
+        <!-- Validação checagem -->
+        <div class="card" style="flex:1;">
+            <form action="salvar_inteligenciaMercado.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="processo_id" value="<?= $processoId ?>">
 
-            <input type="hidden" name="processo_id" value="<?= $processoId ?>">
+                <h1>Validação checagem dos produtos</h1>
 
-            <h1>Validação checagem dos produtos</h1>
+                <div class="form-group" id="blocoChecagem">
+                    Produto não encontrado
+                    <label>
+                        <input type="checkbox" id="pecas_separadas" name="pecas_separadas" value="1">
+                    </label>
 
-            <div class="form-group" id="blocoChecagem">
-                Produto não encontrado
-                <label>
-                    <input type="checkbox" id="pecas_separadas" name="pecas_separadas" value="1">
-                </label>
+                    Quantidade diferente do solicitado
+                    <label>
+                        <input type="checkbox" id="qtd_diferente" name="qtd_diferente" value="1">
+                        <input type="file" id="arquivo_qtd" name="arquivo_qtd" accept="image/*" style="display:none;">
+                    </label>
 
-                Quantidade diferente do solicitado
-                <label>
-                    <input type="checkbox" id="qtd_diferente" name="qtd_diferente" value="1">
-                    <input type="file" id="arquivo_qtd" name="arquivo_qtd" accept="image/*" style="display:none;">
-                </label>
+                    Defeito na peça (Lascado, amassado, risco, etc)
+                    <label>
+                        <input type="checkbox" id="qualidade" name="qualidade" value="1">
+                        <input type="file" id="arquivo_qualidade" name="arquivo_qualidade" accept="image/*" style="display:none;">
+                    </label>
+                    
+                    Falta de Identificação (Nome do produto na peça)
+                    <label>
+                        <input type="checkbox" id="identificacao" name="identificacao" value="1">
+                        <input type="file" id="arquivo_identificacao" name="arquivo_identificacao" accept="image/*" style="display:none;">
+                    </label>
+                </div>
 
-                Defeito na peça (Lascado, amassado, risco, etc)
-                <label>
-                    <input type="checkbox" id="qualidade" name="qualidade" value="1">
-                    <input type="file" id="arquivo_qualidade" name="arquivo_qualidade" accept="image/*" style="display:none;">
-                </label>
-                
-                Falta de Identificação (Nome do produto na peça)
-                <label>
-                    <input type="checkbox" id="identificacao" name="identificacao" value="1">
-                    <input type="file" id="arquivo_identificacao" name="arquivo_identificacao" accept="image/*" style="display:none;">
-                </label>
+                <div class="form-group">
+                    <label for="observacao">Observação:</label>
+                    <input type="text" name="observacao_inteligenciaMercado" placeholder="Observação">
+                </div>
 
-            </div>
+                <h3>Próxima Etapa</h3>
+                <div class="form-group">
+                    <?= selectEtapas(null, $processo['etapa_atual']) ?>
+                </div>
+                <button type="submit">Liberar Processo</button>
+            </form><br>
 
-            <div class="form-group">
-                 <label for="observacao">Observação:</label>
-                 <input type="text" name="observacao_inteligenciaMercado" placeholder="Observação">
-            </div>
+            <form method="POST" onsubmit="return confirmarVoltar()">
+                <input type="hidden" name="acao" value="voltar">
+                <button type="submit">Voltar Etapa</button>
+            </form>
 
-            <h3>Próxima Etapa</h3>
+            <script>
+            function confirmarVoltar() {
+                return confirm("O item vai retornar para a fase <?= $etapaAnterior ?>, tem certeza?");
+            }
+            </script>
+        </div>
 
-            <div class="form-group">
-                <?= selectEtapas(null, $processo['etapa_atual']) ?>
-            </div>
-            <button type="submit">Liberar Processo</button>
-        </form><br>
-        <form method="POST" onsubmit="return confirmarVoltar()">
-            <input type="hidden" name="acao" value="voltar">
-            <button type="submit">Voltar Etapa</button>
-        </form>
-
-        <script>
-        function confirmarVoltar() {
-            return confirm("O item vai retornar para a fase <?= $etapaAnterior ?>, tem certeza?");
-        }
-        </script>
-
+        <!-- Histórico de Pendências -->
+        <?php if (!empty($processo['tipo_pendencia'])): ?>
+        <div class="card" style="flex:1;">
+            <h2>Histórico de Pendências</h2>
+            <table>
+                <tr>
+                    <th>Tipo de Pendência</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+                <tr>
+                    <td><?= ucfirst(str_replace('_', ' ', $processo['tipo_pendencia'])) ?></td>
+                    <td><?= htmlspecialchars($processo['descricao'] ?? 'Sem descrição') ?></td>
+                    <td><?= htmlspecialchars($processo['status_evidencia']) ?></td>
+                    <td>
+                        <?php if (!empty($processo['caminho_arquivo'])): ?>
+                            <a href="/uploads/evidencias/<?= htmlspecialchars($processo['caminho_arquivo']) ?>" target="_blank">Ver Evidência</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -163,7 +196,6 @@ if (!$processo) {
     const checkbox = document.getElementById(checkboxId);
     const fileInput = document.getElementById(fileInputId);
 
-    // Estado inicial: escondido
     fileInput.style.display = 'none';
 
     checkbox.addEventListener('change', function() {
@@ -171,17 +203,14 @@ if (!$processo) {
         fileInput.style.display = 'inline';
       } else {
         fileInput.style.display = 'none';
-        fileInput.value = ''; // limpa arquivo selecionado
+        fileInput.value = '';
       }
     });
   }
 
-  // Ativa para cada par
   toggleFileInput('qtd_diferente', 'arquivo_qtd');
   toggleFileInput('qualidade', 'arquivo_qualidade');
   toggleFileInput('identificacao', 'arquivo_identificacao');
 </script>
 
-
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>
-
