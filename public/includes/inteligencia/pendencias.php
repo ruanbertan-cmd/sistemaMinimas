@@ -9,23 +9,6 @@ if (!isset($_GET['id'])) {
 
 $processoId = (int) $_GET['id'];
 
-// Se o usuário clicou em "Voltar Etapa"
-function etapaAnterior(PDO $pdo, int $processoId) {
-    $ordemEtapas = ['comunicacao','detec','amostra','inteligencia_mercado','designers','fotografia'];
-
-    $stmt = $pdo->prepare("SELECT etapa_atual FROM SM_itens_processos WHERE id = ?");
-    $stmt->execute([$processoId]);
-    $etapaAtual = $stmt->fetchColumn();
-
-    $pos = array_search($etapaAtual, $ordemEtapas);
-    if ($pos === false || $pos === 0) {
-        return null;
-    }
-    return $ordemEtapas[$pos - 1];
-}
-
-$etapaAnterior = etapaAnterior($pdo, $processoId);
-
 // Buscar pendências registradas
 $stmt = $pdo->prepare("
     SELECT tipo_pendencia, caminho_arquivo, descricao, status_evidencia
