@@ -6,7 +6,6 @@ function listarEtapas() {
         'detec' => 'Detec',
         'amostra' => 'Amostra',
         'inteligencia_mercado' => 'Inteligência de Mercado',
-        'manipulacao' => 'Manipulação',
         'fotografia' => 'Fotografia',
         'detec_retrabalho' => 'Retrabalho Detec (Ajustando Pendencias)'
     ];
