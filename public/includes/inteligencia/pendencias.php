@@ -28,7 +28,7 @@ $pendencias = $stmt->fetchAll();
     <?php else: ?>
         <?php foreach ($pendencias as $p): ?>
             <div class="card">
-                <h3><?= ucfirst(str_replace('_', ' ', $p['tipo_pendencia'])) ?></h3>
+                <h2><?= ucfirst(str_replace('_', ' ', $p['tipo_pendencia'])) ?></h2><br>
 
                 <?php if (empty($p['caminho_arquivo'])): ?>
                     <p><em>Sem evidência registrada</em></p>

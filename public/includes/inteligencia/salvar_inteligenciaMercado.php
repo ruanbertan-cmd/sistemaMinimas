@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtupdate = $pdo->prepare("
                 UPDATE SM_itens_processos
                 SET etapa_atual = ?,
-                    status_geral = 'pendencias_detec'
+                    status_geral = 'retrabalhando_pendencias'
                 WHERE id = ?
             ");
             $stmtupdate->execute([

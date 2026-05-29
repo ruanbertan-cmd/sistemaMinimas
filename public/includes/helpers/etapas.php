@@ -8,7 +8,7 @@ function listarEtapas() {
         'inteligencia_mercado' => 'Inteligência de Mercado',
         'manipulacao' => 'Manipulação',
         'fotografia' => 'Fotografia',
-        'pendencias' => 'Pendências'
+        'detec_retrabalho' => 'Retrabalho Detec (Ajustando Pendencias)'
     ];
 }
 
@@ -19,7 +19,7 @@ function selectEtapas($selected = null, $etapaAtual = null) {
     if ($etapaAtual !== 'inteligencia_mercado') {
         unset($etapas['fotografia']);
         unset($etapas['manipulacao']);
-        unset($etapas['pendencias']);
+        unset($etapas['detec_retrabalho']);
     }
 
     $html = '<select name="proxima_etapa" required>';

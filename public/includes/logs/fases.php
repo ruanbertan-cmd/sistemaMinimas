@@ -55,8 +55,32 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <td>
                 <span class="status andamento">
-                    <?= htmlspecialchars($item['etapa_atual'] ?? 'Inteligência Mercado') ?>
-                </span>
+                    <?php switch ($item['etapa_atual']) {
+                        case 'comunicacao':
+                            echo 'Comunicação';
+                            break;
+                        case 'detec':
+                            echo 'Detec';
+                            break;
+                        case 'amostra':
+                            echo 'Amostra';
+                            break;
+                        case 'fotografo':
+                            echo 'Fotografia';
+                            break;
+                        case 'inteligencia_mercado':
+                            echo 'Inteligência de Mercado';
+                            break;
+                        case 'design':
+                            echo 'Design';
+                            break;
+                        case 'detec_retrabalho':
+                            echo 'Detec';
+                            break;
+                        default:
+                            echo ucfirst(str_replace('_', ' ', $item['etapa_atual'] ?? 'Pendente'));
+                    }
+                    ?>
             </td>
 
             <td>
@@ -86,7 +110,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'fotografo' => '/../includes/relatorios/pacote.php',
                     'inteligencia_mercado' => '/../includes/inteligencia/inteligenciaMercado.php',
                     'design' => '/../includes/designers/designers.php',
-                    'pendencias' => '/../includes/inteligencia/pendencias.php'
+                    'detec_retrabalho' => '/../includes/inteligencia/pendencias.php'
                 };
                 ?>
             
