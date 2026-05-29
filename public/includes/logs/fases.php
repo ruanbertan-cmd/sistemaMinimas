@@ -85,7 +85,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'amostra' => '/../includes/amostra/amostra.php',
                     'fotografo' => '/../includes/relatorios/pacote.php',
                     'inteligencia_mercado' => '/../includes/inteligencia/inteligenciaMercado.php',
-                    'design' => '/../includes/designers/designers.php'
+                    'design' => '/../includes/designers/designers.php',
+                    'pendencias' => '/../includes/inteligencia/pendencias.php'
                 };
                 ?>
             
