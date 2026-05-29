@@ -73,6 +73,7 @@ $stmt = $pdo->prepare("
 
         f.tipo_pendencia,
         f.caminho_arquivo,
+        f.data_registro,
         f.descricao,
         f.status_evidencia,
         f.comentario_validacao
@@ -171,14 +172,16 @@ if (!$processo) {
             <table>
                 <tr>
                     <th>Tipo de Pendência</th>
-                    <th>Descrição</th>
+                    <th>Data</th>
                     <th>Status</th>
+                    <th>Comentário</th>
                     <th>Ações</th>
                 </tr>
                 <tr>
                     <td><?= ucfirst(str_replace('_', ' ', $processo['tipo_pendencia'])) ?></td>
-                    <td><?= htmlspecialchars($processo['descricao'] ?? 'Sem descrição') ?></td>
+                    <td><?= date('d/m/Y H:i', strtotime($processo['data_registro'])) ?></td>
                     <td><?= htmlspecialchars($processo['status_evidencia']) ?></td>
+                    <td><?= htmlspecialchars($processo['comentario_validacao']) ?></td>
                     <td>
                         <?php if (!empty($processo['caminho_arquivo'])): ?>
                             <a href="/uploads/evidencias/<?= htmlspecialchars($processo['caminho_arquivo']) ?>" target="_blank">Ver Evidência</a>
