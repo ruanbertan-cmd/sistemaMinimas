@@ -17,14 +17,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ");
     $stmt->execute([$status, $comentario, $processoId, $tipoPendencia]);
 
-    // Atualiza etapa do processo
-    $stmtUpdate = $pdo->prepare("
-        UPDATE SM_itens_processos
-        SET etapa_atual = ?, status_geral = 'em_andamento'
-        WHERE id = ?
+    $stmtCheck = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM SM_evidencias_inteligenciaMercado
+        WHERE processo_id = ? AND status_evidencia = 'pendente'
     ");
-    $stmtUpdate->execute([$proximaEtapa, $processoId]);
+    $stmtCheck->execute([$processoId]);
+    $pendentes = $stmtCheck->fetchColumn();
 
-    header("Location: pendencias.php?id=$processoId");
-    exit;
+    if ($pendentes == 0) {
+        // Atualiza etapa do processo
+        $stmtUpdate = $pdo->prepare("
+            UPDATE SM_itens_processos
+            SET etapa_atual = ?, status_geral = 'em_andamento'
+            WHERE id = ?
+        ");
+        $stmtUpdate->execute([$proximaEtapa, $processoId]);
+
+        header("Location: pendencias.php?id=$processoId");
+        exit;
+    } else {
+        header("Location: pendencias.php?id=$processoId");
+        exit;
+    }
 }
