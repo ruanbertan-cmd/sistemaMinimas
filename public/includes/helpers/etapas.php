@@ -1,5 +1,5 @@
 <?php
-session_start();
+/*session_start();
 /*
 // Verifica se o usuário já está logado
 if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])):
