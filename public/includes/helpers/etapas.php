@@ -1,4 +1,10 @@
 <?php
+session_start();
+/*
+// Verifica se o usuário já está logado
+if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])):
+    header('Location: proposta_cadastro.php');
+    exit;*/
 
 function listarEtapas() {
     return [
@@ -33,3 +39,15 @@ function selectEtapas($selected = null, $etapaAtual = null) {
 
     return $html;
 }
+?>
+
+<?php
+/*// Se não estiver logado, redireciona para a página de validação
+else:
+    $link = 'http://ww1.eliane.com/sistemaminimas/index.php';
+    $link = base64_encode($link);
+    #header('Location: https://ww1.eliane.com/valida/?link=' . $link);
+    header('Location: https://ww1.eliane.com/valida/?link=' . $link);
+    exit;
+endif;
+?>*/
