@@ -47,6 +47,14 @@ WHERE pi.pacote_id = ?
 ");
 $stmtInfoComunicacao->execute([$pacoteId]);
 $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtImagem = $pdo->prepare("
+    SELECT item_id, pacote_id, item_id, tipo, caminho_arquivo, status, data_upload
+    FROM SM_item_imagens
+    WHERE pacote_id = ?
+");
+$stmtImagem->execute([$pacoteId]);
+$imagens = $stmtImagem->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div style="text-align:left; margin-top:90px;">
@@ -129,6 +137,7 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
             <th>Precisa Video</th>
             <th>Qtd Manipulação</th>
             <th>Upload</th>
+            <th>Aprovações Imagens</th>
         </tr>
         <?php foreach ($itens as $item): ?>
         <tr>
@@ -173,6 +182,42 @@ $infoComunicacao = $stmtInfoComunicacao->fetchAll(PDO::FETCH_ASSOC);
                     -
                 <?php endif; ?>
             </td>
+
+            <td>
+                <?php
+                // Filtra imagens do item atual
+                $imagensItem = array_filter($imagens, function($img) use ($item) {
+                    return $img['item_id'] == $item['item_id'];
+                });
+
+                $statusGeral = '-';
+                if (!empty($imagensItem)) {
+                    $temReprovado = false;
+                    $temPendente = false;
+                    $temAprovado = false;
+
+                    foreach ($imagensItem as $img) {
+                        if ($img['status'] === 'rejeitado') {
+                            $temReprovado = true;
+                        } elseif ($img['status'] === 'pendente') {
+                            $temPendente = true;
+                        } elseif ($img['status'] === 'aprovado') {
+                            $temAprovado = true;
+                        }
+                    }
+
+                    if ($temReprovado) {
+                        $statusGeral = "<span class='status rejeitado'>Rejeitado (subir nova imagem)</span>";
+                    } elseif ($temPendente) {
+                        $statusGeral = "<span class='status pendente'>Pendente</span>";
+                    } elseif ($temAprovado && !$temPendente && !$temReprovado) {
+                        $statusGeral = "<span class='status aprovado'>Aprovado</span>";
+                    }
+                }
+
+                echo $statusGeral;
+                ?>
+                <a href="../produto/produto_detalhes.php?item_id=<?= $item['item_id'] ?>">Detalhes</a>
         </tr>
         <?php endforeach; ?>
     </table>
