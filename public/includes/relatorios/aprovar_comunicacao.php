@@ -9,8 +9,7 @@ if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])
 require_once __DIR__ . '/../../../config/conexao.php';
 
 $pacoteId = (int) $_POST['pacote_id'];
-$processoId = (int) $_POST['processo_id'];
-$usuario = $_SESSION['usuario'] ?? 'comunicacao';
+$usuario  = $_SESSION['usuario'] ?? 'comunicacao';
 
 try {
     $pdo->beginTransaction();
@@ -33,26 +32,35 @@ try {
     ");
     $stmtItens->execute([$pacoteId]);
 
-    // Salvando fase Atual para Atualizacao Log posteriormente
-    $stmtEtapaAtual = $pdo->prepare("
-        SELECT etapa_atual
-        FROM SM_itens_processos
-        WHERE id = ?
+    // Buscar um processo vinculado ao pacote
+    $stmtProc = $pdo->prepare("
+        SELECT processo_id
+        FROM SM_pacote_itens
+        WHERE pacote_id = ?
+        LIMIT 1
     ");
+    $stmtProc->execute([$pacoteId]);
+    $processoId = $stmtProc->fetchColumn();
+
+    if (!$processoId) {
+        throw new Exception("Processo não encontrado para o pacote informado.");
+    }
+
+    // Etapa atual
+    $stmtEtapaAtual = $pdo->prepare("SELECT etapa_atual FROM SM_itens_processos WHERE id = ?");
     $stmtEtapaAtual->execute([$processoId]);
     $etapaAtual = $stmtEtapaAtual->fetchColumn();
-    // Atualizando etapda do item para a nova
+
+    // Atualiza etapa do item
     $stmtupdate = $pdo->prepare("
         UPDATE SM_itens_processos
         SET etapa_atual = ?,
-        status_geral = 'em_andamento'
+            status_geral = 'em_andamento'
         WHERE id = ?
     ");
-    $stmtupdate->execute([
-        'preparando_envio',
-        $processoId
-    ]);
-    // Salvando log da alteracao de fase
+    $stmtupdate->execute(['preparando_envio', $processoId]);
+
+    // Log
     $stmtLog = $pdo->prepare("
         INSERT INTO SM_itens_movimentacoes
         (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
@@ -63,21 +71,20 @@ try {
         $etapaAtual,
         'fotografo',
         'aprovar_envio_pecas',
-        'usuarioSistema',
+        $usuario,
         'Aprovando envio das peças separadas na amostra',
         date('Y-m-d H:i:s')
     ]);
 
     $pdo->commit();
 
-    header("Location: fotografo.php");
+    header("Location: pacote.php");
     exit;
 } catch (Exception $e) {
     $pdo->rollBack();
     die("Erro: " . $e->getMessage());
 }
 ?>
-
 <?php
 /*// Se não estiver logado, redireciona para a página de validação
 else:
