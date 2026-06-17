@@ -93,9 +93,17 @@ function closeModal() {
                     <div>Status:
                         <?php switch($foto['status']): case 'pendente': echo 'Pendente'; break; case 'aprovado': echo 'Aprovado'; break; case 'rejeitado': echo 'Rejeitado'; break; endswitch; ?>
                     </div>
-                    <form action="aprovar_imagem.php" method="POST">
+
+                    <form action="aprovar_imagem.php" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="imagem_id" value="<?= $foto['id'] ?>">
-                        <?php if ($foto['status'] === 'pendente'): ?>
+
+                        <?php if ($foto['status'] === 'rejeitado'): ?>
+                            <!-- Botão de atualizar com upload -->
+                            <input type="file" name="nova_imagem" accept="image/*" required>
+                            <button type="submit" name="acao" value="atualizar">Atualizar</button>
+
+                        <?php elseif ($foto['status'] === 'pendente'): ?>
+                            <!-- Botões de aprovação/rejeição -->
                             <button type="submit" name="acao" value="aprovado">Aprovar</button>
                             <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
                         <?php endif; ?>
@@ -114,13 +122,22 @@ function closeModal() {
                     <div>Status:
                         <?php switch($manip['status']): case 'pendente': echo 'Pendente'; break; case 'aprovado': echo 'Aprovado'; break; case 'rejeitado': echo 'Rejeitado'; break; endswitch; ?>
                     </div>
-                    <form action="aprovar_imagem.php" method="POST">
+
+                    <form action="aprovar_imagem.php" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="imagem_id" value="<?= $manip['id'] ?>">
-                        <?php if ($manip['status'] === 'pendente'): ?>
+
+                        <?php if ($manip['status'] === 'rejeitado'): ?>
+                            <!-- Botão de atualizar com upload -->
+                            <input type="file" name="nova_imagem" accept="image/*" required>
+                            <button type="submit" name="acao" value="atualizar">Atualizar</button>
+
+                        <?php elseif ($manip['status'] === 'pendente'): ?>
+                            <!-- Botões de aprovação/rejeição -->
                             <button type="submit" name="acao" value="aprovado">Aprovar</button>
                             <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
                         <?php endif; ?>
                     </form>
+
                 </div>
             <?php endforeach; ?>
         </td>
@@ -136,11 +153,22 @@ function closeModal() {
                     <div>Status:
                         <?php switch($video['status']): case 'pendente': echo 'Pendente'; break; case 'aprovado': echo 'Aprovado'; break; case 'rejeitado': echo 'Rejeitado'; break; endswitch; ?>
                     </div>
-                    <form action="aprovar_imagem.php" method="POST">
+
+                    <form action="aprovar_imagem.php" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="imagem_id" value="<?= $video['id'] ?>">
-                        <button type="submit" name="acao" value="aprovado">Aprovar</button>
-                        <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
+
+                        <?php if ($video['status'] === 'rejeitado'): ?>
+                            <!-- Botão de atualizar com upload -->
+                            <input type="file" name="nova_imagem" accept="image/*" required>
+                            <button type="submit" name="acao" value="atualizar">Atualizar</button>
+
+                        <?php elseif ($video['status'] === 'pendente'): ?>
+                            <!-- Botões de aprovação/rejeição -->
+                            <button type="submit" name="acao" value="aprovado">Aprovar</button>
+                            <button type="submit" name="acao" value="rejeitado">Rejeitar</button>
+                        <?php endif; ?>
                     </form>
+
                 </div>
             <?php endforeach; ?>
         </td>
