@@ -54,7 +54,7 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if ($pacote['status'] === 'aberto'): ?>
                     <form action="aprovar_comunicacao.php" method="POST" 
                         onsubmit="return confirm('Aprovar este pacote?');">
-                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                        <input type="hidden" name="pacote_id" value="<?= $pacote['pacote_id'] ?>">
                         <button type="submit" class="btn-liberar">Aprovar</button>
                     </form>
                 <?php else: ?>
@@ -76,9 +76,9 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         - <?= htmlspecialchars($pacote['responsavel_fotografia']) ?>
                     </span>
                 <?php else: ?>
-                    <form action="enviar_pecas.php" method="POST" 
-                        onsubmit="return confirm('Confirmar agendamento do fotógrafo?');">
-                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                    <form action="agendamento.php" method="POST" 
+                        onsubmit="return confirmarAgendamento(this);">
+                        <input type="hidden" name="pacote_id" value="<?= $pacote['pacote_id'] ?>">
                         <input type="datetime-local" name="data_hora" required>
                         <input type="text" name="responsavel" placeholder="Responsável" required>
                         <button type="submit" class="btn-detalhes">Agendar</button>
@@ -93,7 +93,7 @@ $pacotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php elseif (!$pacote['data_envio']): ?>
                     <form action="enviar_pecas.php" method="POST" 
                         onsubmit="return confirm('Confirmar envio das peças?');">
-                        <input type="hidden" name="pacote_id" value="<?= $pacoteId ?>">
+                        <input type="hidden" name="pacote_id" value="<?= $pacote['pacote_id'] ?>">
                         <button type="submit" class="btn-detalhes">Enviar</button>
                     </form>
                 <?php else: ?>
@@ -122,8 +122,12 @@ function confirmarAgendamento(form) {
         return false;
     }
 
-    return confirm("Tem certeza que deseja agendar para " + date('d/m/Y H:i', strtotime(dataHora)) + "?");
+    const dt = new Date(dataHora);
+    const formatado = dt.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+
+    return confirm("Tem certeza que deseja agendar para " + formatado + "?");
 }
+
 </script>
 ?>
 
