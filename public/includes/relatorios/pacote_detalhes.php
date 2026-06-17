@@ -190,7 +190,7 @@ $imagens = $stmtImagem->fetchAll(PDO::FETCH_ASSOC);
                     return $img['item_id'] == $item['item_id'];
                 });
 
-                $statusGeral = '-';
+                $statusGeral = '<span class="status pendente">Sem imagens</span>';
                 if (!empty($imagensItem)) {
                     $temReprovado = false;
                     $temPendente = false;
@@ -208,16 +208,18 @@ $imagens = $stmtImagem->fetchAll(PDO::FETCH_ASSOC);
 
                     if ($temReprovado) {
                         $statusGeral = "<span class='status rejeitado'>Rejeitado (subir nova imagem)</span>";
+                        echo "<a href='../produto/produto_detalhes.php?item_id=" . htmlspecialchars($item['item_id']) . "' class='btn-detalhes'>Detalhes</a>";
                     } elseif ($temPendente) {
                         $statusGeral = "<span class='status pendente'>Pendente</span>";
+                        echo "<a href='../produto/produto_detalhes.php?item_id=" . htmlspecialchars($item['item_id']) . "' class='btn-detalhes'>Detalhes</a>";
                     } elseif ($temAprovado && !$temPendente && !$temReprovado) {
                         $statusGeral = "<span class='status aprovado'>Aprovado</span>";
+                        echo "<a href='../produto/produto_detalhes.php?item_id=" . htmlspecialchars($item['item_id']) . "' class='btn-detalhes'>Detalhes</a>";
                     }
                 }
 
                 echo $statusGeral;
                 ?>
-                <a href="../produto/produto_detalhes.php?item_id=<?= $item['item_id'] ?>">Detalhes</a>
         </tr>
         <?php endforeach; ?>
     </table>
