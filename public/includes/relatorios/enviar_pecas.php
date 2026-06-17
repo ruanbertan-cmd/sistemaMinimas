@@ -25,7 +25,7 @@ try {
     // Atualiza todos os itens vinculados para status 'enviado' e data que o processo foi finalizado
     $stmtItens = $pdo->prepare("
         UPDATE SM_itens_processos
-        SET status_geral = 'enviado', finalizado = NOW()
+        SET status_geral = 'enviado', finalizado_em = NOW()
         WHERE id IN (SELECT processo_id FROM SM_pacote_itens WHERE pacote_id = ?)
     ");
     $stmtItens->execute([$pacoteId]);
@@ -33,7 +33,7 @@ try {
     // Registrar movimentação
     $stmtLog = $pdo->prepare("
         INSERT INTO SM_itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao)
-        SELECT processo_id, 'fotografo', 'amostra', 'envio_pecas', ?, 'Peças enviadas'
+        SELECT processo_id, 'fotografia', 'amostra', 'envio_pecas', ?, 'Peças enviadas'
         FROM SM_pacote_itens
         WHERE pacote_id = ?
     ");
@@ -41,7 +41,7 @@ try {
 
     $pdo->commit();
 
-    header("Location: fotografo.php");
+    header("Location: pacote.php");
     exit;
 } catch (Exception $e) {
     $pdo->rollBack();
