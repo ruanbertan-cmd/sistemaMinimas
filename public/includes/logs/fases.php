@@ -124,7 +124,8 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Botão Liberar -->
                 <?php if (!empty($item['processo_id']) 
                         && $item['status_geral'] !== 'cancelado' 
-                        && $item['status_geral'] !== 'preparando_envio' 
+                        && $item['status_geral'] !== 'preparando_envio'
+                        && $item['status_geral'] !== 'agendado'
                         && $item['etapa_atual'] !== 'fotografo' 
                         && $item['etapa_atual'] !== 'design' 
                         && $item['status_geral'] !== 'enviado'): ?>
@@ -151,6 +152,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                  <?php if (!empty($item['processo_id'])
                         && $item['status_geral'] !== 'cancelado'
                         && $item['status_geral'] !== 'preparando_envio'
+                        && $item['status_geral'] !== 'agendado'
                         && $item['etapa_atual'] !== 'fotografo'
                         && $item['etapa_atual'] !== 'design'
                         && $item['status_geral'] !== 'enviado'): ?>
