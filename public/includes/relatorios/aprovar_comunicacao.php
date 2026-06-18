@@ -54,7 +54,7 @@ try {
     // Atualiza etapa do item
     $stmtupdate = $pdo->prepare("
         UPDATE SM_itens_processos
-        SET etapa_atual = ?,
+        SET etapa_atual = 'fotografo',
             status_geral = 'em_andamento'
         WHERE id = ?
     ");
