@@ -90,6 +90,11 @@ try {
         exit;
     }
 
+    // Declarando variais antes para retirar o error de variáveis não definidas no log
+    $areaDestino = '';
+    $acaoLog     = '';
+    $observacao  = '';
+
     // Fluxo de aprovação/rejeição
     if ($acao === 'aprovado') {
         $stmtupdate = $pdo->prepare("
