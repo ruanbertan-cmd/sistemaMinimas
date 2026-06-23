@@ -72,9 +72,9 @@ foreach ($dados as $linha) {
         </div>
 
         <div class="card">
-            <h3>Fotografo</h3>
+            <h3>Fotografia/Manipulação</h3>
             <div class="numero">
-                <?= $contagem['fotografo'] ?? 0 ?>
+                <?= $contagem['fotografia'] ?? 0 ?>
             </div>
         </div>
 

@@ -35,7 +35,7 @@ foreach ($_FILES['arquivos']['tmp_name'] as $index => $tmpName) {
     }
 }
 
-$usuario = $_SESSION['usuario'] ?? 'fotografo';
+$usuario = $_SESSION['usuario'] ?? 'fotografia';
 
 try {
     $pdo->beginTransaction();
@@ -77,7 +77,7 @@ try {
     ");
     $stmtLog->execute([
         $processoId,
-        'fotografo',
+        'fotografia',
         'design',
         'upload_imagens',
         'usuarioSistema',

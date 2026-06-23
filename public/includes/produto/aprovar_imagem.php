@@ -148,13 +148,13 @@ try {
     } elseif ($acao === 'rejeitado') {
         $stmtupdate = $pdo->prepare("
             UPDATE SM_itens_processos
-            SET etapa_atual = 'fotografo',
+            SET etapa_atual = 'fotografia',
                 status_geral = 'aguardando_imagem'
             WHERE id = ?
         ");
         $stmtupdate->execute([$processoId]);
 
-        $areaDestino = 'fotografo';
+        $areaDestino = 'fotografia';
         $acaoLog     = 'rejeitado_imagem';
         $observacao  = 'Imagem reprovada, retornando para o fotógrafo';
     }

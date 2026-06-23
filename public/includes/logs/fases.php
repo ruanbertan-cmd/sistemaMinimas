@@ -72,7 +72,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         case 'amostra':
                             echo 'Amostra';
                             break;
-                        case 'fotografo':
+                        case 'fotografia':
                             echo 'Fotografia';
                             break;
                         case 'inteligencia_mercado':
@@ -114,7 +114,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     'comunicacao' => '/../includes/comunicacao/comunicacao.php',
                     'detec' => '/../includes/detec/detec.php',
                     'amostra' => '/../includes/amostra/amostra.php',
-                    'fotografo' => '/../includes/relatorios/pacote.php',
+                    'fotografia' => '/../includes/relatorios/pacote.php',
                     'inteligencia_mercado' => '/../includes/inteligencia/inteligenciaMercado.php',
                     'design' => '/../includes/designers/designers.php',
                     'detec_retrabalho' => '/../includes/inteligencia/pendencias.php'
@@ -127,7 +127,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         && $item['status_geral'] !== 'finalizado'
                         && $item['status_geral'] !== 'preparando_envio'
                         && $item['status_geral'] !== 'agendado'
-                        && $item['etapa_atual'] !== 'fotografo' 
+                        && $item['etapa_atual'] !== 'fotografia' 
                         && $item['etapa_atual'] !== 'design' 
                         && $item['status_geral'] !== 'enviado'): ?>
 
@@ -155,7 +155,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         && $item['status_geral'] !== 'finalizado'
                         && $item['status_geral'] !== 'preparando_envio'
                         && $item['status_geral'] !== 'agendado'
-                        && $item['etapa_atual'] !== 'fotografo'
+                        && $item['etapa_atual'] !== 'fotografia'
                         && $item['etapa_atual'] !== 'design'
                         && $item['status_geral'] !== 'enviado'): ?>
                     <a class="btn-deletar"

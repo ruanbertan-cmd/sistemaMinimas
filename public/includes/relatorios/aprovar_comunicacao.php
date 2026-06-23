@@ -54,7 +54,7 @@ try {
     // Atualiza etapa do item
     $stmtupdate = $pdo->prepare("
         UPDATE SM_itens_processos
-        SET etapa_atual = 'fotografo',
+        SET etapa_atual = 'fotografia',
             status_geral = 'em_andamento'
         WHERE id = ?
     ");
@@ -69,7 +69,7 @@ try {
     $stmtLog->execute([
         $processoId,
         $etapaAtual,
-        'fotografo',
+        'fotografia',
         'aprovar_envio_pecas',
         $usuario,
         'Aprovando envio das peças separadas na amostra',
