@@ -99,7 +99,7 @@ try {
     if ($acao === 'aprovado') {
         $stmtupdate = $pdo->prepare("
             UPDATE SM_itens_processos
-            SET etapa_atual = 'sistema_imagem',
+            SET etapa_atual = 'inteligencia_mercado',
                 status_geral = 'finalizado'
             WHERE id = ?
         ");
