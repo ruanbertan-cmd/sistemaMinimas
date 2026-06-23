@@ -18,6 +18,7 @@ SELECT
     i.descricao,
     i.tamanho_nominal,
     i.marca,
+    i.ciclo_lancamento,
     p.id AS processo_id,
     p.etapa_atual,
     p.status_geral,
@@ -43,6 +44,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Código</th>
             <th>Descrição</th>
             <th>Marca</th>
+            <th>Ciclo</th>
             <th>Etapa Atual</th>
             <th>Status Geral</th>
             <th>Liberar Etapa</th>
@@ -59,6 +61,7 @@ $itens = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($item['codigo_item']) ?></td>
             <td><?= htmlspecialchars($item['descricao']) . ' ' . htmlspecialchars($item['tamanho_nominal']) ?></td>
             <td><?= htmlspecialchars($item['marca']) ?></td>
+            <td><?= str_replace('_', '/', htmlspecialchars($item['ciclo_lancamento'])) ?></td>
 
             <td>
                 <span class="status andamento">
