@@ -117,7 +117,7 @@ try {
                 cor_pt_br, cor_us, cor_es, recomendado_uso, local_uso,
                 retificado, polo, lancamento, estilo, estilo_us, estilo_es,
                 relevo, rodape, numeros_face, tamanho_fabricacao,
-                codigo_item, unidade_fabricacao, monocalibre, CicloLancamento,
+                codigo_item, unidade_fabricacao, monocalibre, ciclo_lancamento,
                 tem_minimas, status
             )
             SELECT 
@@ -132,7 +132,7 @@ try {
                 m.cor_pt_br, m.cor_us, m.cor_es, m.recomendado_uso, m.local_uso,
                 m.retificado, m.polo, m.lancamento, m.estilo, m.estilo_us, m.estilo_es,
                 m.relevo, m.rodape, m.numeros_face, m.tamanho_fabricacao,
-                m.codigo_item, m.unidade_fabricacao, m.monocalibre, m.CicloLancamento,
+                m.codigo_item, m.unidade_fabricacao, m.monocalibre, m.ciclo_lancamento,
                 1 AS tem_minimas, 1 AS status
             FROM SM_item_imagens im
             INNER JOIN SM_itens_processos p ON im.item_id = p.item_id

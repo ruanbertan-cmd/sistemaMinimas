@@ -61,7 +61,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     codigo_item,
                     unidade_fabricacao,
                     monocalibre,
-                    CicloLancamento,
+                    ciclo_lancamento,
                     data_criacao,
                     responsavel_carga
                 )
