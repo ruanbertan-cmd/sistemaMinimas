@@ -6,8 +6,22 @@ if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])
     header('Location: proposta_cadastro.php');
     exit;*/
 
+require_once __DIR__ . '/../../../config/conexao.php';
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/menu.php';
+
+// Visualização colunas necessárias para cadastro de produtos
+$tabela = "SM_cadastros_itens_minimas";
+$stmt = $pdo->prepare("
+    SELECT COLUMN_NAME 
+    FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = ?
+      AND COLUMN_NAME NOT IN ('id', 'data_criacao', 'responsavel_carga')
+    ORDER BY ORDINAL_POSITION
+");
+$stmt->execute([$tabela]);
+$colunas = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 
 ?>
@@ -39,7 +53,18 @@ require_once __DIR__ . '/../layout/menu.php';
                     <button type="submit">Enviar Arquivo</button>
                 </div>
 
-            </form>
+            </form><br>
+
+        <div class="campos-upload">
+            <h3>ℹ️</h3>
+            <div class="lista-colunas" style=" max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                ℹ️ Os campos abaixo devem estar presentes no arquivo CSV para que o upload seja realizado com sucesso:
+                <?php foreach ($colunas as $coluna): ?>
+                    <p><?= htmlspecialchars($coluna) ?></p>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
         </div>
     </div>
 </div>
