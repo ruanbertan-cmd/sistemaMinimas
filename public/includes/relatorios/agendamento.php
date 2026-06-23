@@ -1,7 +1,10 @@
 <?php
 session_start();
-
-
+/*
+// Verifica se o usuário já está logado
+if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])):
+    header('Location: proposta_cadastro.php');
+    exit;*/
 
 require_once __DIR__ . '/../../../config/conexao.php';
 
@@ -62,3 +65,14 @@ try {
     $pdo->rollBack();
     die("Erro ao agendar fotógrafo: " . $e->getMessage());
 }
+?>
+<?php
+/*// Se não estiver logado, redireciona para a página de validação
+else:
+    $link = 'http://ww1.eliane.com/sistemaminimas/index.php';
+    $link = base64_encode($link);
+    #header('Location: https://ww1.eliane.com/valida/?link=' . $link);
+    header('Location: https://ww1.eliane.com/valida/?link=' . $link);
+    exit;
+endif;
+?>*/
