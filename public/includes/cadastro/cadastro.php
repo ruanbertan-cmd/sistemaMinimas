@@ -32,7 +32,7 @@ require_once __DIR__ . '/../layout/menu.php';
 
                 <div class="form-group">
                     <label>Selecionar arquivo CSV</label>
-                    <input type="file" name="arquivo" required>
+                    <input class="input-cadastro" type="file" name="arquivo" required>
                 </div>
 
                 <div class="form-actions">

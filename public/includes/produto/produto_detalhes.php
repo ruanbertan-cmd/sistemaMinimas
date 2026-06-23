@@ -99,7 +99,7 @@ function closeModal() {
 
                         <?php if ($foto['status'] === 'rejeitado'): ?>
                             <!-- Botão de atualizar com upload -->
-                            <input type="file" name="nova_imagem" accept="image/*" required>
+                            <input class="upload-input" type="file" name="nova_imagem" accept="image/*" required>
                             <button type="submit" name="acao" value="atualizar">Atualizar</button>
 
                         <?php elseif ($foto['status'] === 'pendente'): ?>
@@ -128,7 +128,7 @@ function closeModal() {
 
                         <?php if ($manip['status'] === 'rejeitado'): ?>
                             <!-- Botão de atualizar com upload -->
-                            <input type="file" name="nova_imagem" accept="image/*" required>
+                            <input class="upload-input" type="file" name="nova_imagem" accept="image/*" required>
                             <button type="submit" name="acao" value="atualizar">Atualizar</button>
 
                         <?php elseif ($manip['status'] === 'pendente'): ?>
@@ -159,7 +159,7 @@ function closeModal() {
 
                         <?php if ($video['status'] === 'rejeitado'): ?>
                             <!-- Botão de atualizar com upload -->
-                            <input type="file" name="nova_imagem" accept="image/*" required>
+                            <input class="upload-input" type="file" name="nova_imagem" accept="image/*" required>
                             <button type="submit" name="acao" value="atualizar">Atualizar</button>
 
                         <?php elseif ($video['status'] === 'pendente'): ?>

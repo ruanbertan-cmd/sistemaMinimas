@@ -277,7 +277,22 @@ tr:hover {
     color: #444;
 }
 
-input[type="file"] {
+.input-cadastro {
+    width: 80%;
+    padding: 12px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: 0.2s;
+}
+    
+.input-cadastro:hover {
+    border-color: #1f1f1f;
+    background: #f1f5f9;
+}
+
+.upload-input {
     width: 30%;
     padding: 12px;
     border: 1px dashed #cbd5e1;
@@ -287,7 +302,7 @@ input[type="file"] {
     transition: 0.2s;
 }
 
-input[type="file"]:hover {
+.upload-input:hover {
     border-color: #1f1f1f;
     background: #f1f5f9;
 }
