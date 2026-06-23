@@ -67,10 +67,10 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                 )
                 VALUES (
                     UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),?,UPPER(?),UPPER(?),
-                    UPPER(?),?,?,UPPER(?),UPPER(?),?,?,?,UPPER(?),?,
-                    UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),
-                    UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),?,UPPER(?),?,UPPER(REPLACE(?, ' ', '')),UPPER(?),
-                    ?,NOW(),'usuario Cadastrante'
+                    UPPER(?),?,UPPER(?),UPPER(?),UPPER(?),?,?,?,UPPER(?),?,
+                    UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),
+                    UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),UPPER(?),UPPER(?),UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),IF(UPPER(?) = 'TRUE', 1, 0),?,
+                    UPPER(?),?,UPPER(REPLACE(?, ' ', '')),IF(UPPER(?) = 'TRUE', 1, 0),?,NOW(),'usuario Cadastrante'
                 )
             ");
 
