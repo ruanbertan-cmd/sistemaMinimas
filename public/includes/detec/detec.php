@@ -87,8 +87,8 @@ if (!$processo) {
                     if (!empty($processo['precisa_foto']) && (int)$processo['qtd_pecas_foto'] > 0):
 
                         $descricaoFoto = ($metodo === 'totalmenteFotografado')
-                            ? 'Faces distintas'
-                            : 'Faces aleatórias';
+                            ? 'Faces Distintas'
+                            : 'Faces Aleatórias';
 
                     ?>
                         <li>
@@ -147,7 +147,13 @@ if (!$processo) {
             <h3>Próxima Etapa</h3>
 
             <div class="form-group">
-                <?= selectEtapas(null, $processo['etapa_atual']) ?>
+                <?php if ($precisaFoto || $precisaManipulacaoFaces): ?>
+                    <input type="hidden" name="proxima_etapa" value="inteligencia_mercado">
+                    <p>Após clicar em liberar processo, o mesmo seguirá para a etapa de Inteligência de Mercado</p>
+                <?php else: ?>
+                    <?= selectEtapas(null, $processo['etapa_atual']) ?>
+                <?php endif; ?>
+                
             </div>
             <button type="submit">Liberar Processo</button>
         </form>

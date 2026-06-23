@@ -70,7 +70,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
                     UPPER(?),?,UPPER(?),UPPER(?),UPPER(?),?,?,?,UPPER(?),?,
                     UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),UPPER(?),UPPER(?),UPPER(?),UPPER(?),UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),
                     UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),UPPER(?),UPPER(?),UPPER(?),IF(UPPER(?) = 'TRUE', 1, 0),IF(UPPER(?) = 'TRUE', 1, 0),?,
-                    UPPER(?),?,UPPER(REPLACE(?, ' ', '')),IF(UPPER(?) = 'TRUE', 1, 0),?,NOW(),'usuario Cadastrante'
+                    UPPER(?),?,UPPER(REPLACE(?, ' ', '')),IF(UPPER(?) = 'TRUE', 1, 0),?,date('Y-m-d H:i:s'),'usuario Cadastrante'
                 )
             ");
 
@@ -81,7 +81,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] == 0) {
 
             $stmtLog = $pdo->prepare("
                 INSERT INTO SM_itens_movimentacoes (processo_id, area_origem, area_destino, acao, usuario, observacao, data_acao)
-                VALUES (?, 'Criação de Item', 'Inteligência de Mercado', 'Processo Iniciado', 'usuario', 'Inicio do Processo', NOW())
+                VALUES (?, 'Criação de Item', 'Inteligência de Mercado', 'Processo Iniciado', 'usuario', 'Inicio do Processo', date('Y-m-d H:i:s'))
             "); // Aqui idealmente deveria ser o usuário logado, mas como não temos sistema de login, deixei um placeholder
 
             $contagemMarcas = [
