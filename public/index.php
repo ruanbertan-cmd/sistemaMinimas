@@ -52,8 +52,8 @@ foreach ($dados as $linha) {
 
         <div class="card">
             <h3>Detec</h3>
-        <div class="numero">
-            <?= $contagem['detec'] + $contagem['detec_retrabalho'] ?? 0 ?>
+            <div class="numero">
+                <?= ($contagem['detec'] ?? 0) + ($contagem['detec_retrabalho'] ?? 0) ?>
             </div>
         </div>
 
