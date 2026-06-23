@@ -148,6 +148,33 @@ document.getElementById('metodoImagem').addEventListener('change', function() {
     }
 
 });
+
+document.querySelector("form").addEventListener("submit", function(e) {
+    const precisaFoto = document.querySelector("input[name='precisa_foto']").checked;
+    const qtdFoto = document.querySelector("input[name='qtd_pecas_foto']").value;
+
+    if (!precisaFoto && qtdFoto) {
+        alert("Você informou quantidade de fotos sem marcar 'Precisa de Foto'.");
+        e.preventDefault();
+    }
+
+    const precisaManipulacao = document.querySelector("input[name='precisa_manipulacao']").checked;
+    const qtdManipulacao = document.querySelector("input[name='qtd_pecas_manipulacao']").value;
+
+    if (!precisaManipulacao && qtdManipulacao) {
+        alert("Você informou quantidade de manipulação sem marcar 'Precisa de Manipulação'.");
+        e.preventDefault();
+    }
+
+    const precisaVideo = document.querySelector("input[name='precisa_video']").checked;
+    const qtdVideo = document.querySelector("input[name='qtd_pecas_video']").value;
+
+    if (!precisaVideo && qtdVideo) {
+        alert("Você informou quantidade de vídeo sem marcar 'Precisa de Vídeo'.");
+        e.preventDefault();
+    }
+});
+
 </script>
 
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>
