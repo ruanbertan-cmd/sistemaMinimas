@@ -336,6 +336,19 @@ tr:hover {
     font-weight: bold;
 }
 
+.campos-upload .lista-colunas {
+    display: none; /* começa escondido */
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: absolute; /* aparece como tooltip */
+    z-index: 10;
+}
+
+.campos-upload:hover .lista-colunas {
+    display: block; /* mostra quando passa o mouse */
+}
+
 /* =========================
    INPUTS & SELECTS
 ========================= */
