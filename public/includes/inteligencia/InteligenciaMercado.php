@@ -10,39 +10,12 @@ require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/menu.php';
 require_once __DIR__ . '/../helpers/etapas.php';
 require_once __DIR__ . '/../../../config/conexao.php';
-require_once __DIR__ . '/../helpers/voltarEtapas.php';
 
 if (!isset($_GET['id'])) {
     die("Processo não informado.");
 }
 
 $processoId = (int) $_GET['id'];
-
-// Se o usuário clicou em "Voltar Etapa"
-function etapaAnterior(PDO $pdo, int $processoId) {
-    $ordemEtapas = ['comunicacao','detec','amostra','inteligencia_mercado','designers','fotografia'];
-
-    $stmt = $pdo->prepare("SELECT etapa_atual FROM SM_itens_processos WHERE id = ?");
-    $stmt->execute([$processoId]);
-    $etapaAtual = $stmt->fetchColumn();
-
-    $pos = array_search($etapaAtual, $ordemEtapas);
-    if ($pos === false || $pos === 0) {
-        return null;
-    }
-    return $ordemEtapas[$pos - 1];
-}
-
-$etapaAnterior = etapaAnterior($pdo, $processoId);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'voltar') {
-    try {
-        $novaEtapa = voltarEtapa($pdo, $processoId, 'usuarioSistema', 'Voltando etapa por revisão');
-        echo "<div class='alert'>Processo voltou para etapa: $novaEtapa</div>";
-    } catch (Exception $e) {
-        echo "<div class='alert error'>Erro: " . $e->getMessage() . "</div>";
-    }
-}
 
 // Buscar dados do processo + item
 $stmt = $pdo->prepare("
@@ -158,18 +131,7 @@ if (!$processo) {
                     <?= selectEtapas(null, $processo['etapa_atual']) ?>
                 </div>
                 <button type="submit">Liberar Processo</button>
-            </form><br>
-
-            <form method="POST" onsubmit="return confirmarVoltar()">
-                <input type="hidden" name="acao" value="voltar">
-                <button type="submit">Voltar Etapa</button>
             </form>
-
-            <script>
-            function confirmarVoltar() {
-                return confirm("O item vai retornar para a fase <?= $etapaAnterior ?>, tem certeza?");
-            }
-            </script>
         </div>
 
         <!-- Histórico de Pendências -->
