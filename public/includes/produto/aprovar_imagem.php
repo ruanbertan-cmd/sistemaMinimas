@@ -43,7 +43,7 @@ try {
         // Upload de nova imagem
         if (!empty($_FILES['nova_imagem']['name']) && $_FILES['nova_imagem']['error'] === 0) {
             $arquivoTmp   = $_FILES['nova_imagem']['tmp_name'];
-            $nomeArquivo  = uniqid() . '_' . basename($_FILES['nova_imagem']['name']);
+            $nomeArquivo  = basename($_FILES['nova_imagem']['name']);
             $destino      = __DIR__ . '/../relatorios/uploads/' . $nomeArquivo;
             move_uploaded_file($arquivoTmp, $destino);
 
