@@ -68,7 +68,32 @@ $stmt = $pdo->prepare("
 ");
 
 $stmt->execute([$processoId]);
+$processo = $stmt->fetch(); // dados principais
+$pendencias = $stmt->fetchAll(); // todas as pendências
+
+// Dados principais do processo
+$stmt = $pdo->prepare("
+    SELECT p.id AS processo_id, p.etapa_atual, p.status_geral,
+           i.codigo_item, i.descricao, i.tamanho_nominal, i.marca,
+           i.unidade_fabricacao, i.numeros_face
+    FROM SM_itens_processos p
+    INNER JOIN SM_cadastros_itens_minimas i ON i.id = p.item_id
+    WHERE p.id = ?
+");
+$stmt->execute([$processoId]);
 $processo = $stmt->fetch();
+
+// Histórico de pendências
+$stmtPendencias = $pdo->prepare("
+    SELECT tipo_pendencia, caminho_arquivo, data_registro, descricao,
+           status_evidencia, comentario_validacao
+    FROM SM_evidencias_inteligenciaMercado
+    WHERE processo_id = ?
+    ORDER BY data_registro DESC
+");
+$stmtPendencias->execute([$processoId]);
+$pendencias = $stmtPendencias->fetchAll();
+
 
 if (!$processo) {
     die("Processo não encontrado.");
@@ -135,7 +160,7 @@ if (!$processo) {
         </div>
 
         <!-- Histórico de Pendências -->
-        <?php if (!empty($processo['tipo_pendencia'])): ?>
+        <?php if (!empty($pendencias)): ?>
         <div class="card" style="flex:1;">
             <h2>Histórico de Pendências</h2>
             <table>
@@ -146,20 +171,23 @@ if (!$processo) {
                     <th>Comentário</th>
                     <th>Ações</th>
                 </tr>
+                <?php foreach ($pendencias as $p): ?>
                 <tr>
-                    <td><?= ucfirst(str_replace('_', ' ', $processo['tipo_pendencia'])) ?></td>
-                    <td><?= date('d/m/Y H:i', strtotime($processo['data_registro'])) ?></td>
-                    <td><?= htmlspecialchars($processo['status_evidencia']) ?></td>
-                    <td><?= htmlspecialchars($processo['comentario_validacao']) ?></td>
+                    <td><?= ucfirst(str_replace('_', ' ', $p['tipo_pendencia'])) ?></td>
+                    <td><?= date('d/m/Y H:i', strtotime($p['data_registro'])) ?></td>
+                    <td><?= htmlspecialchars($p['status_evidencia']) ?></td>
+                    <td><?= htmlspecialchars($p['comentario_validacao']) ?></td>
                     <td>
-                        <?php if (!empty($processo['caminho_arquivo'])): ?>
-                            <a href="/uploads/evidencias/<?= htmlspecialchars($processo['caminho_arquivo']) ?>" target="_blank">Ver Evidência</a>
+                        <?php if (!empty($p['caminho_arquivo'])): ?>
+                            <a href="/uploads/evidencias/<?= htmlspecialchars($p['caminho_arquivo']) ?>" target="_blank">Ver Evidência</a>
                         <?php endif; ?>
                     </td>
                 </tr>
+                <?php endforeach; ?>
             </table>
         </div>
         <?php endif; ?>
+
     </div>
 </div>
 
