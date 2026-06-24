@@ -8,6 +8,7 @@ if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])
 
 require_once __DIR__ . '/../../../config/conexao.php';
 
+
 $imagemId = (int) $_POST['imagem_id'];
 $acao     = $_POST['acao'];
 $pacoteId = (int) ($_POST['pacote_id'] ?? 0);
@@ -51,10 +52,10 @@ try {
                 UPDATE SM_item_imagens
                 SET status = 'pendente',
                     caminho_arquivo = ?,
-                    data_upload = NOW()
+                    data_upload = ?
                 WHERE id = ?
             ");
-            $stmt->execute([$nomeArquivo, $imagemId]);
+            $stmt->execute([$nomeArquivo, date('Y-m-d H:i:s'), $imagemId]);
         } else {
             $stmt = $pdo->prepare("UPDATE SM_item_imagens SET status = 'pendente' WHERE id = ?");
             $stmt->execute([$imagemId]);
