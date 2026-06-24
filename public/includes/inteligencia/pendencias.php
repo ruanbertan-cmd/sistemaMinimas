@@ -54,11 +54,10 @@ $pendencias = $stmt->fetchAll();
                     <textarea name="comentario_validacao" rows="3"></textarea>
 
                     <label>Encaminhar para:</label>
-                    <select name="proxima_etapa" required>
-                        <option value=""></option>
-                        <option value="detec">Amostra</option>
-                        <option value="inteligencia_mercado">Inteligência Mercado</option>
-                    </select>
+                        <div class="form-group">
+                            <input type="hidden" name="proxima_etapa" value="inteligencia_mercado">
+                            <p>O processo seguirá para a etapa de Inteligência de Mercado</p>
+                        </div>
 
                     <button type="submit" name="acao" value="validar">Validar Pendência</button>
                     <button type="submit" name="acao" value="rejeitar">Rejeitar Pendência</button>
