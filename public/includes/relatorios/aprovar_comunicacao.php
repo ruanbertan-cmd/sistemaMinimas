@@ -58,7 +58,7 @@ try {
             status_geral = 'em_andamento'
         WHERE id = ?
     ");
-    $stmtupdate->execute(['preparando_envio', $processoId]);
+    $stmtupdate->execute([$processoId]);
 
     // Log
     $stmtLog = $pdo->prepare("

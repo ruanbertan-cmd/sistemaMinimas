@@ -8,7 +8,6 @@ if (isset($_SESSION['usuario']) && !empty($_SESSION['usuario']['login_usuario'])
 
 require_once __DIR__ . '/../../../config/conexao.php';
 
-$processoId = (int) $_POST['processo_id'];
 $pacoteId   = (int) $_POST['pacote_id'];
 $dataHora   = $_POST['data_hora'] ?? null;
 $responsavel = $_POST['responsavel'] ?? null;
@@ -28,7 +27,7 @@ try {
             status_geral = 'agendado'
         WHERE id = ?
     ");
-    $stmtupdate->execute(['preparando_envio', $processoId]);
+    $stmtupdate->execute([$pacoteId]);
 
     // Atualiza pacote com data de agendamento e responsável
     $stmt = $pdo->prepare("
